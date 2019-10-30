@@ -1,6 +1,5 @@
 package im.status.keycard.connect
 
-import android.app.Activity
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
