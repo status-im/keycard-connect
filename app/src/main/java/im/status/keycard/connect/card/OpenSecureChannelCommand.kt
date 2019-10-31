@@ -29,6 +29,8 @@ class OpenSecureChannelCommand : CardCommand {
                 PairingManager.putPairing(cmdSet.applicationInfo.instanceUID, cmdSet.pairing)
                 cmdSet.autoOpenSecureChannel()
                 return CommandResult.OK
+            } catch(e: IOException) {
+                e.printStackTrace()
             } finally {
                 pairingPassword = null
             }

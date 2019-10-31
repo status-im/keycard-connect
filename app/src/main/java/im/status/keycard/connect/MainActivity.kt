@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import im.status.keycard.android.NFCCardManager
 import android.content.Intent
 import im.status.keycard.connect.card.*
+import im.status.keycard.connect.data.PairingManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cardManager: NFCCardManager
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
 
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications))
+
+        PairingManager.init(this)
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
         executor = CardScriptExecutor(this)

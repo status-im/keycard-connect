@@ -9,7 +9,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "im.status.keycard.connect"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -45,6 +45,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
+    implementation 'androidx.security:security-crypto:1.0.0-alpha02'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.64'
     implementation 'com.github.status-im.status-keycard-java:android:3.0.1'
     implementation "com.github.walletconnect:kotlin-walletconnect-lib:0.9.3"

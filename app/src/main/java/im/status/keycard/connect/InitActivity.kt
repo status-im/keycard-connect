@@ -8,6 +8,7 @@ import android.util.Base64
 import android.view.View
 import im.status.keycard.globalplatform.Crypto
 import android.util.Base64.NO_PADDING
+import android.util.Base64.NO_WRAP
 import android.widget.TextView
 
 
@@ -49,6 +50,6 @@ class InitActivity : AppCompatActivity() {
     }
 
     fun randomToken(length: Int): String {
-        return Base64.encodeToString(Crypto.randomBytes(length), NO_PADDING)
+        return Base64.encodeToString(Crypto.randomBytes(length), NO_PADDING or NO_WRAP)
     }
 }
