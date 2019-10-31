@@ -1,14 +1,12 @@
-package im.status.keycard.connect
+package im.status.keycard.connect.ui
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import im.status.keycard.connect.data.PINCache
 import android.content.Intent
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
+import im.status.keycard.connect.R
 
 const val PAIRING_ACTIVITY_PASSWORD = "pairingPassword"
 
@@ -21,7 +19,10 @@ class PairingActivity : AppCompatActivity() {
 
     fun ok(view: View) {
         val intent = Intent()
-        intent.putExtra(PAIRING_ACTIVITY_PASSWORD, findViewById<EditText>(R.id.passwordText).text.toString())
+        intent.putExtra(
+            PAIRING_ACTIVITY_PASSWORD, findViewById<EditText>(
+                R.id.passwordText
+            ).text.toString())
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

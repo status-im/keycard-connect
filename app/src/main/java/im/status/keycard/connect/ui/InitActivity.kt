@@ -1,4 +1,4 @@
-package im.status.keycard.connect
+package im.status.keycard.connect.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -10,6 +10,7 @@ import im.status.keycard.globalplatform.Crypto
 import android.util.Base64.NO_PADDING
 import android.util.Base64.NO_WRAP
 import android.widget.TextView
+import im.status.keycard.connect.R
 
 
 const val INIT_ACTIVITY_PIN = "initPIN"

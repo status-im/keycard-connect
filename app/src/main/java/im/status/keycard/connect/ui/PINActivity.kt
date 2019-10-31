@@ -1,12 +1,12 @@
-package im.status.keycard.connect
+package im.status.keycard.connect.ui
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.View.INVISIBLE
 import android.widget.EditText
 import android.widget.TextView
+import im.status.keycard.connect.R
 import im.status.keycard.connect.data.PINCache
 
 const val PIN_ACTIVITY_ATTEMPTS = "remainingAttempts"

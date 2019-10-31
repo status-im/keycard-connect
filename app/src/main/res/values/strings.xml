@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Keycard Connect</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="pin_prompt">Insert your PIN</string>
     <string name="pin_attempts">%1$d retries left</string>
     <string name="pairing_password_prompt">Insert your pairing password</string>

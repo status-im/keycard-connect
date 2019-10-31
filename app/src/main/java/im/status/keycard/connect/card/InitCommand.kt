@@ -2,10 +2,10 @@ package im.status.keycard.connect.card
 
 import android.app.Activity
 import android.content.Intent
-import im.status.keycard.connect.INIT_ACTIVITY_PAIRING
-import im.status.keycard.connect.INIT_ACTIVITY_PIN
-import im.status.keycard.connect.INIT_ACTIVITY_PUK
-import im.status.keycard.connect.InitActivity
+import im.status.keycard.connect.ui.INIT_ACTIVITY_PAIRING
+import im.status.keycard.connect.ui.INIT_ACTIVITY_PIN
+import im.status.keycard.connect.ui.INIT_ACTIVITY_PUK
+import im.status.keycard.connect.ui.InitActivity
 import im.status.keycard.connect.data.PairingManager
 import im.status.keycard.io.APDUException
 import java.io.IOException

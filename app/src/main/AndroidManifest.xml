@@ -16,11 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".InitActivity"></activity>
-        <activity android:name=".PairingActivity" />
-        <activity android:name=".PINActivity" />
+        <activity android:name=".ui.InitActivity"></activity>
+        <activity android:name=".ui.PairingActivity" />
+        <activity android:name=".ui.PINActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

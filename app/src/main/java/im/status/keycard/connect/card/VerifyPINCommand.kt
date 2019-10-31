@@ -2,9 +2,9 @@ package im.status.keycard.connect.card
 
 import android.app.Activity
 import android.content.Intent
-import im.status.keycard.connect.PINActivity
-import im.status.keycard.connect.PIN_ACTIVITY_ATTEMPTS
-import im.status.keycard.connect.PIN_ACTIVITY_CARD_UID
+import im.status.keycard.connect.ui.PINActivity
+import im.status.keycard.connect.ui.PIN_ACTIVITY_ATTEMPTS
+import im.status.keycard.connect.ui.PIN_ACTIVITY_CARD_UID
 import im.status.keycard.connect.data.PINCache
 import im.status.keycard.io.APDUException
 import im.status.keycard.io.WrongPINException
