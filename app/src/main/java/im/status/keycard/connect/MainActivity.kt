@@ -9,9 +9,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import im.status.keycard.android.NFCCardManager
-import im.status.keycard.connect.card.CardScriptExecutor
 import android.content.Intent
-import im.status.keycard.connect.card.REQ_INTERACTIVE_SCRIPT
+import im.status.keycard.connect.card.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cardManager: NFCCardManager
@@ -27,8 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications))
 
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this)
         executor = CardScriptExecutor(this)
+        executor.setScript(listOf(SelectCommand(), InitCommand(), OpenSecureChannelCommand(), VerifyPINCommand()))
 
         cardManager = NFCCardManager()
         cardManager.setCardListener(executor)

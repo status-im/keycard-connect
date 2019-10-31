@@ -26,9 +26,10 @@ class OpenSecureChannelCommand : CardCommand {
             try {
                 //TODO: must distinguish real IOException from card exception (to fix in SDK)
                 cmdSet.autoPair(pairingPassword)
+                PairingManager.putPairing(cmdSet.applicationInfo.instanceUID, cmdSet.pairing)
                 cmdSet.autoOpenSecureChannel()
                 return CommandResult.OK
-            } catch (e: IOException) {
+            } finally {
                 pairingPassword = null
             }
         }

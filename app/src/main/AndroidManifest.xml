@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="im.status.keycard.connect">
 
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-feature
         android:name="android.hardware.nfc.hce"
         android:required="true" />
@@ -13,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PairingActivity"></activity>
+        <activity android:name=".InitActivity"></activity>
+        <activity android:name=".PairingActivity" />
         <activity android:name=".PINActivity" />
         <activity
             android:name=".MainActivity"

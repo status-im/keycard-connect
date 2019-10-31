@@ -5,5 +5,9 @@
     <string name="title_notifications">Notifications</string>
     <string name="pin_prompt">Insert your PIN</string>
     <string name="pin_attempts">%1$d retries left</string>
-    <string name="pairing_password_prompt" >Insert your pairing password</string>
+    <string name="pairing_password_prompt">Insert your pairing password</string>
+    <string name="init_warning">Please save the credentials below as they won\'t be shown anymore. They can all be changed later, but you must at least remember the PIN</string>
+    <string name="pin_label">PIN</string>
+    <string name="puk_label">PUK</string>
+    <string name="pairing_label">Pairing password</string>
 </resources>

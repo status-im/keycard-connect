@@ -34,6 +34,7 @@ class VerifyPINCommand : CardCommand {
         if (pin != null) {
             try {
                 cmdSet.verifyPIN(pin).checkAuthOK()
+                retries = -1;
                 return CommandResult.OK
             } catch (e: WrongPINException) {
                 PINCache.removePIN(cmdSet.applicationInfo.instanceUID)
