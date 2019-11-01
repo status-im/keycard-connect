@@ -7,8 +7,7 @@ import android.view.View
 import android.widget.EditText
 import android.content.Intent
 import im.status.keycard.connect.R
-
-const val PAIRING_ACTIVITY_PASSWORD = "pairingPassword"
+import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 
 class PairingActivity : AppCompatActivity() {
 
@@ -19,10 +18,7 @@ class PairingActivity : AppCompatActivity() {
 
     fun ok(view: View) {
         val intent = Intent()
-        intent.putExtra(
-            PAIRING_ACTIVITY_PASSWORD, findViewById<EditText>(
-                R.id.passwordText
-            ).text.toString())
+        intent.putExtra(PAIRING_ACTIVITY_PASSWORD, findViewById<EditText>(R.id.passwordText).text.toString())
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

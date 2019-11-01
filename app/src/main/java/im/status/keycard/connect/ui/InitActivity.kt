@@ -11,11 +11,9 @@ import android.util.Base64.NO_PADDING
 import android.util.Base64.NO_WRAP
 import android.widget.TextView
 import im.status.keycard.connect.R
-
-
-const val INIT_ACTIVITY_PIN = "initPIN"
-const val INIT_ACTIVITY_PUK = "initPUK"
-const val INIT_ACTIVITY_PAIRING = "initPairing"
+import im.status.keycard.connect.data.INIT_ACTIVITY_PAIRING
+import im.status.keycard.connect.data.INIT_ACTIVITY_PIN
+import im.status.keycard.connect.data.INIT_ACTIVITY_PUK
 
 class InitActivity : AppCompatActivity() {
     private lateinit var pin: String

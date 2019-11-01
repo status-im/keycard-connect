@@ -9,7 +9,6 @@ import im.status.keycard.applet.Pairing
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
-
 object PairingManager {
     private lateinit var sharedPreferences: SharedPreferences
 

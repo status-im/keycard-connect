@@ -8,6 +8,7 @@ import android.content.Intent
 import im.status.keycard.connect.R
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.PairingManager
+import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 
 class MainActivity : AppCompatActivity() {
     private lateinit var cardManager: NFCCardManager

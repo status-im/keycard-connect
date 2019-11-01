@@ -7,8 +7,6 @@ import im.status.keycard.io.CardChannel
 import im.status.keycard.io.CardListener
 import java.util.*
 
-const val REQ_INTERACTIVE_SCRIPT = 0x01
-
 class CardScriptExecutor(activity: Activity) : CardListener {
     class Context(val mainActivity: Activity) {
         var cardChannel: CardChannel? = null
