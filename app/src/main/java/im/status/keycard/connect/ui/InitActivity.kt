@@ -25,7 +25,7 @@ class InitActivity : AppCompatActivity() {
         setContentView(R.layout.activity_init)
 
         pin = String.format("%06d", Crypto.randomLong(Crypto.PIN_BOUND))
-        puk = String.format("%012d", Crypto.randomLong(Crypto.PUK_BOUND));
+        puk = String.format("%012d", Crypto.randomLong(Crypto.PUK_BOUND))
         pairing = randomToken(6)
 
         findViewById<TextView>(R.id.pinView).text = pin
@@ -33,7 +33,7 @@ class InitActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.pairingView).text = pairing
     }
 
-    fun ok(view: View) {
+    fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent()
         intent.putExtra(INIT_ACTIVITY_PIN, pin)
         intent.putExtra(INIT_ACTIVITY_PUK, puk)
@@ -43,7 +43,7 @@ class InitActivity : AppCompatActivity() {
         finish()
     }
 
-    fun cancel(view: View) {
+    fun cancel(@Suppress("UNUSED_PARAMETER") view: View) {
         setResult(Activity.RESULT_CANCELED)
         finish()
     }

@@ -16,14 +16,14 @@ class PairingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_pairing)
     }
 
-    fun ok(view: View) {
+    fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent()
         intent.putExtra(PAIRING_ACTIVITY_PASSWORD, findViewById<EditText>(R.id.passwordText).text.toString())
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
 
-    fun cancel(view: View) {
+    fun cancel(@Suppress("UNUSED_PARAMETER") view: View) {
         setResult(Activity.RESULT_CANCELED)
         finish()
     }

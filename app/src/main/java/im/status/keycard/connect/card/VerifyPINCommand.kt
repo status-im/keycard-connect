@@ -3,9 +3,10 @@ package im.status.keycard.connect.card
 import android.app.Activity
 import android.content.Intent
 import im.status.keycard.connect.ui.PINActivity
-import im.status.keycard.connect.ui.PIN_ACTIVITY_ATTEMPTS
-import im.status.keycard.connect.ui.PIN_ACTIVITY_CARD_UID
 import im.status.keycard.connect.data.PINCache
+import im.status.keycard.connect.data.PIN_ACTIVITY_ATTEMPTS
+import im.status.keycard.connect.data.PIN_ACTIVITY_CARD_UID
+import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import im.status.keycard.io.APDUException
 import im.status.keycard.io.WrongPINException
 import java.io.IOException
@@ -19,8 +20,8 @@ class VerifyPINCommand : CardCommand {
             putExtra(PIN_ACTIVITY_CARD_UID, instanceUID)
         }
 
-
         mainActivity.startActivityForResult(intent, REQ_INTERACTIVE_SCRIPT)
+
         return CommandResult.UX_ONGOING
     }
 
@@ -34,7 +35,7 @@ class VerifyPINCommand : CardCommand {
         if (pin != null) {
             try {
                 cmdSet.verifyPIN(pin).checkAuthOK()
-                retries = -1;
+                retries = -1
                 return CommandResult.OK
             } catch (e: WrongPINException) {
                 PINCache.removePIN(cmdSet.applicationInfo.instanceUID)

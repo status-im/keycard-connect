@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         PairingManager.init(this)
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
@@ -33,16 +32,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (this::nfcAdapter.isInitialized) {
-            nfcAdapter.enableReaderMode(this, this.cardManager,NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK, null)
-        }
+        nfcAdapter.enableReaderMode(this, this.cardManager,NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK, null)
     }
 
     override fun onPause() {
         super.onPause()
-        if (this::nfcAdapter.isInitialized) {
-            nfcAdapter.disableReaderMode(this)
-        }
+        nfcAdapter.disableReaderMode(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

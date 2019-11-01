@@ -31,7 +31,7 @@ class PINActivity : AppCompatActivity() {
         }
     }
 
-    fun ok(view: View) {
+    fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
         val pinText = findViewById<EditText>(R.id.pinText)
 
         PINCache.putPIN(cardUID, pinText.text.toString())
@@ -39,7 +39,7 @@ class PINActivity : AppCompatActivity() {
         finish()
     }
 
-    fun cancel(view: View) {
+    fun cancel(@Suppress("UNUSED_PARAMETER") view: View) {
         setResult(Activity.RESULT_CANCELED)
         finish()
     }

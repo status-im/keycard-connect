@@ -3,8 +3,9 @@ package im.status.keycard.connect.card
 import android.app.Activity
 import android.content.Intent
 import im.status.keycard.applet.KeycardCommandSet
+import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 import im.status.keycard.connect.data.PairingManager
-import im.status.keycard.connect.ui.PAIRING_ACTIVITY_PASSWORD
+import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import im.status.keycard.connect.ui.PairingActivity
 import java.io.IOException
 
