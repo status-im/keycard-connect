@@ -10,3 +10,5 @@ const val INIT_ACTIVITY_PUK = "initPUK"
 const val INIT_ACTIVITY_PAIRING = "initPairing"
 
 const val REQ_INTERACTIVE_SCRIPT = 0x01
+
+const val CACHE_VALIDITY = 15 * 60 * 1000

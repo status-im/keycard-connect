@@ -9,14 +9,14 @@ import im.status.keycard.applet.Pairing
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
-object PairingManager {
+class PairingManager(context: Context) {
     private lateinit var sharedPreferences: SharedPreferences
 
     private fun id(instanceUID: ByteArray) : String {
         return Base64.encodeToString(instanceUID, NO_PADDING or NO_WRAP)
     }
 
-    fun init(context: Context) {
+    init {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
         sharedPreferences = EncryptedSharedPreferences.create("pairings", masterKeyAlias, context, EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
     }

@@ -2,11 +2,11 @@ package im.status.keycard.connect.card
 
 import android.content.Intent
 
-enum class CommandResult {
-    OK, CANCEL, RETRY, UX_ONGOING
-}
-
 interface CardCommand {
-    fun run(context: CardScriptExecutor.Context): CommandResult
+    enum class Result {
+        OK, CANCEL, RETRY, UX_ONGOING
+    }
+
+    fun run(context: CardScriptExecutor.ScriptContext): Result
     fun onDataReceived(data: Intent?) {}
 }

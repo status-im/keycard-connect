@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import im.status.keycard.connect.R
+import im.status.keycard.connect.Registry
 import im.status.keycard.connect.data.PINCache
 import im.status.keycard.connect.data.PIN_ACTIVITY_ATTEMPTS
 import im.status.keycard.connect.data.PIN_ACTIVITY_CARD_UID
@@ -34,7 +35,7 @@ class PINActivity : AppCompatActivity() {
     fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
         val pinText = findViewById<EditText>(R.id.pinText)
 
-        PINCache.putPIN(cardUID, pinText.text.toString())
+        Registry.pinCache.putPIN(cardUID, pinText.text.toString())
         setResult(Activity.RESULT_OK)
         finish()
     }

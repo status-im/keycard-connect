@@ -7,4 +7,6 @@
     <string name="pin_label">PIN</string>
     <string name="puk_label">PUK</string>
     <string name="pairing_label">Pairing password</string>
+    <string name="title_activity_change_pin">ChangePINActivity</string>
+    <string name="change_pin_prompt">New PIN</string>
 </resources>

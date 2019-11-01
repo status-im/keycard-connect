@@ -5,19 +5,17 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
 
-object PINCache {
-    const val CACHE_VALIDITY = 15 * 60 * 1000;
-
+class PINCache {
     //TODO: don't use Strings, the memory should be cleared before release. For this the entire
     // chain from the EditText to the SDK should be controlled and never generate a String object.
     // This will require extensions to the SDK.
     private val pins: MutableMap<ByteArrayKey, String> = HashMap()
     private val timestamps: MutableMap<Long, ByteArrayKey> = HashMap()
 
-    private val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1);
+    private val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
 
     init {
-        scheduler.scheduleAtFixedRate(this::cleanCache, 1, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::cleanCache, 1, 1, TimeUnit.MINUTES)
     }
 
     private fun cleanCache() {

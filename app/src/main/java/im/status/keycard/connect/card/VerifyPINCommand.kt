@@ -2,8 +2,8 @@ package im.status.keycard.connect.card
 
 import android.app.Activity
 import android.content.Intent
+import im.status.keycard.connect.Registry
 import im.status.keycard.connect.ui.PINActivity
-import im.status.keycard.connect.data.PINCache
 import im.status.keycard.connect.data.PIN_ACTIVITY_ATTEMPTS
 import im.status.keycard.connect.data.PIN_ACTIVITY_CARD_UID
 import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
@@ -14,39 +14,37 @@ import java.io.IOException
 class VerifyPINCommand : CardCommand {
     private var retries = -1
 
-    private fun promptPIN(mainActivity: Activity, instanceUID: ByteArray): CommandResult {
-        val intent = Intent(mainActivity, PINActivity::class.java).apply {
+    private fun promptPIN(activity: Activity, instanceUID: ByteArray): CardCommand.Result {
+        val intent = Intent(activity, PINActivity::class.java).apply {
             putExtra(PIN_ACTIVITY_ATTEMPTS, retries)
             putExtra(PIN_ACTIVITY_CARD_UID, instanceUID)
         }
 
-        mainActivity.startActivityForResult(intent, REQ_INTERACTIVE_SCRIPT)
+        activity.startActivityForResult(intent, REQ_INTERACTIVE_SCRIPT)
 
-        return CommandResult.UX_ONGOING
+        return CardCommand.Result.UX_ONGOING
     }
 
-    override fun run(context: CardScriptExecutor.Context): CommandResult {
+    override fun run(context: CardScriptExecutor.ScriptContext): CardCommand.Result {
         //TODO: handle retries == 0 with UNBLOCK PIN
 
-        val cmdSet = context.cmdSet ?: return CommandResult.CANCEL
-
-        val pin = PINCache.getPIN(cmdSet.applicationInfo.instanceUID)
+        val pin = Registry.pinCache.getPIN(context.cmdSet.applicationInfo.instanceUID)
 
         if (pin != null) {
             try {
-                cmdSet.verifyPIN(pin).checkAuthOK()
+                context.cmdSet.verifyPIN(pin).checkAuthOK()
                 retries = -1
-                return CommandResult.OK
+                return CardCommand.Result.OK
             } catch (e: WrongPINException) {
-                PINCache.removePIN(cmdSet.applicationInfo.instanceUID)
+                Registry.pinCache.removePIN(context.cmdSet.applicationInfo.instanceUID)
                 retries = e.retryAttempts
             } catch(e: IOException) {
-                return CommandResult.RETRY
+                return CardCommand.Result.RETRY
             } catch(e: APDUException) {
-                return CommandResult.CANCEL
+                return CardCommand.Result.CANCEL
             }
         }
 
-        return promptPIN(context.mainActivity, cmdSet.applicationInfo.instanceUID)
+        return promptPIN(context.activity, context.cmdSet.applicationInfo.instanceUID)
     }
 }

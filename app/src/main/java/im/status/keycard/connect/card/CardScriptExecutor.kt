@@ -5,26 +5,21 @@ import android.content.Intent
 import im.status.keycard.applet.KeycardCommandSet
 import im.status.keycard.io.CardChannel
 import im.status.keycard.io.CardListener
-import java.util.*
 
-class CardScriptExecutor(activity: Activity) : CardListener {
-    class Context(val mainActivity: Activity) {
-        var cardChannel: CardChannel? = null
-        var cmdSet: KeycardCommandSet? = null
-    }
+class CardScriptExecutor(private val activity: Activity) : CardListener {
+    class ScriptContext(val activity: Activity, val cmdSet: KeycardCommandSet)
 
     enum class State {
         READY, UX_ONGOING, RUNNING
     }
 
     private var state = State.READY
-    private var executionContext = Context(activity)
     private var script: List<CardCommand>? = null
+    private var defaultScript: List<CardCommand>? = null
     private var waitingCmd: CardCommand? = null
 
     override fun onConnected(channel: CardChannel) {
-        executionContext.cardChannel = channel
-        executionContext.cmdSet = KeycardCommandSet(executionContext.cardChannel)
+        val executionContext = ScriptContext(activity, KeycardCommandSet(channel))
 
         if (state == State.READY) {
             state = State.RUNNING
@@ -32,22 +27,20 @@ class CardScriptExecutor(activity: Activity) : CardListener {
             return
         }
 
-        //TODO: replace with default script
-        val runningScript = script ?: LinkedList()
+        val runningScript = script ?: defaultScript ?: return
 
         for (cmd in runningScript) {
             when (cmd.run(executionContext)) {
-                CommandResult.OK -> {}
-                CommandResult.CANCEL -> { state = State.READY; return }
-                CommandResult.UX_ONGOING -> { waitingCmd = cmd; return }
-                CommandResult.RETRY -> { return }
+                CardCommand.Result.OK -> {}
+                CardCommand.Result.CANCEL -> { state = State.READY; return }
+                CardCommand.Result.UX_ONGOING -> { waitingCmd = cmd; return }
+                CardCommand.Result.RETRY -> { return }
             }
         }
     }
 
     override fun onDisconnected() {
-        executionContext.cardChannel = null
-        executionContext.cmdSet = null
+
     }
 
     fun onUserInteractionReturned(resultCode: Int, data: Intent?) {

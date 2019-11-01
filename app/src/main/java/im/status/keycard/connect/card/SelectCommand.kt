@@ -4,16 +4,16 @@ import java.io.IOException
 import java.lang.Exception
 
 class SelectCommand : CardCommand {
-    override fun run(context: CardScriptExecutor.Context): CommandResult {
+    override fun run(context: CardScriptExecutor.ScriptContext): CardCommand.Result {
         //TODO: handle not-installed-applet/not-a-keycard
         try {
-            context.cmdSet!!.select().checkOK()
+            context.cmdSet.select().checkOK()
         } catch(e: IOException) {
-            return CommandResult.RETRY
+            return CardCommand.Result.RETRY
         } catch (e: Exception) {
-            return CommandResult.CANCEL
+            return CardCommand.Result.CANCEL
         }
 
-        return CommandResult.OK
+        return CardCommand.Result.OK
     }
 }
