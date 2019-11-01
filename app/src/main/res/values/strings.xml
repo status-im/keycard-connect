@@ -9,4 +9,5 @@
     <string name="pairing_label">Pairing password</string>
     <string name="title_activity_change_pin">ChangePINActivity</string>
     <string name="change_pin_prompt">New PIN</string>
+    <string name="change_pin">Change PIN</string>
 </resources>

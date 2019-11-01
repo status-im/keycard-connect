@@ -13,9 +13,10 @@ class CardScriptExecutor(private val activity: Activity) : CardListener {
         READY, UX_ONGOING, RUNNING
     }
 
+    var defaultScript: List<CardCommand>? = null
+
     private var state = State.READY
     private var script: List<CardCommand>? = null
-    private var defaultScript: List<CardCommand>? = null
     private var waitingCmd: CardCommand? = null
 
     override fun onConnected(channel: CardChannel) {
@@ -29,14 +30,17 @@ class CardScriptExecutor(private val activity: Activity) : CardListener {
 
         val runningScript = script ?: defaultScript ?: return
 
-        for (cmd in runningScript) {
+        script@ for (cmd in runningScript) {
             when (cmd.run(executionContext)) {
                 CardCommand.Result.OK -> {}
-                CardCommand.Result.CANCEL -> { state = State.READY; return }
+                CardCommand.Result.CANCEL -> { break@script}
                 CardCommand.Result.UX_ONGOING -> { waitingCmd = cmd; return }
                 CardCommand.Result.RETRY -> { return }
             }
         }
+
+        script = null
+        state = State.READY
     }
 
     override fun onDisconnected() {
@@ -48,11 +52,12 @@ class CardScriptExecutor(private val activity: Activity) : CardListener {
             waitingCmd?.onDataReceived(data)
             state = State.RUNNING
         } else {
+            script = null
             state = State.READY
         }
     }
 
-    fun setScript(script: List<CardCommand>): Boolean {
+    fun runScript(script: List<CardCommand>): Boolean {
         if (state == State.READY) {
             this.script = script
             return true

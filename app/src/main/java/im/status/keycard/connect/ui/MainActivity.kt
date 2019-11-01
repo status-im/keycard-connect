@@ -1,22 +1,23 @@
 package im.status.keycard.connect.ui
 
+import android.app.Activity
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import im.status.keycard.android.NFCCardManager
 import android.content.Intent
+import android.view.View
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
-import im.status.keycard.connect.data.PairingManager
 import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
+import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Registry.init(this)
-        Registry.scriptExecutor.setScript(listOf(SelectCommand(), InitCommand(), OpenSecureChannelCommand(), VerifyPINCommand()))
+        Registry.scriptExecutor.defaultScript = cardCheckupScript()
     }
 
     override fun onResume() {
@@ -35,5 +36,14 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == REQ_INTERACTIVE_SCRIPT) {
             Registry.scriptExecutor.onUserInteractionReturned(resultCode, data)
         }
+    }
+
+    fun changePIN(@Suppress("UNUSED_PARAMETER") view: View) {
+        startCommand(ChangePINActivity::class)
+    }
+
+    private fun startCommand(activity: KClass<out Activity>) {
+        val intent = Intent(this, activity.java)
+        startActivity(intent)
     }
 }
