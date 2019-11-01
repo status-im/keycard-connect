@@ -30,7 +30,7 @@ class CardScriptExecutor(private val activity: Activity) : CardListener {
 
         val runningScript = script ?: defaultScript ?: return
 
-        script@ for (cmd in runningScript) {
+        script@for (cmd in runningScript) {
             when (cmd.run(executionContext)) {
                 CardCommand.Result.OK -> {}
                 CardCommand.Result.CANCEL -> { break@script}
@@ -64,5 +64,10 @@ class CardScriptExecutor(private val activity: Activity) : CardListener {
         }
 
         return false
+    }
+
+    fun cancelScript() {
+        script = null
+        state = State.READY
     }
 }
