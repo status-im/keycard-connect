@@ -48,7 +48,7 @@ class InitActivity : AppCompatActivity() {
         finish()
     }
 
-    fun randomToken(length: Int): String {
+    private fun randomToken(length: Int): String {
         return Base64.encodeToString(Crypto.randomBytes(length), NO_PADDING or NO_WRAP)
     }
 }

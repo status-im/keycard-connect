@@ -8,8 +8,6 @@ import android.widget.EditText
 import android.widget.TextView
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
-import im.status.keycard.connect.data.PIN_ACTIVITY_ATTEMPTS
-import im.status.keycard.connect.data.PIN_ACTIVITY_CARD_UID
 import im.status.keycard.connect.data.PUK_ACTIVITY_ATTEMPTS
 
 class PUKActivity : AppCompatActivity() {

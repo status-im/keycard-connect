@@ -25,16 +25,16 @@ class InitCommand : CardCommand {
         }
 
         if (initPIN != null && initPUK != null && initPairing != null) {
-            try {
+            return try {
                 context.cmdSet.init(initPIN, initPUK, initPairing).checkOK()
                 context.cmdSet.select().checkOK()
                 context.cmdSet.autoPair(initPairing)
                 Registry.pairingManager.putPairing(context.cmdSet.applicationInfo.instanceUID, context.cmdSet.pairing)
-                return CardCommand.Result.OK
+                CardCommand.Result.OK
             } catch (e: IOException) {
-                return CardCommand.Result.RETRY
+                CardCommand.Result.RETRY
             } catch (e: APDUException) {
-                return CardCommand.Result.CANCEL
+                CardCommand.Result.CANCEL
             } finally {
                 initPIN  = null
                 initPUK = null

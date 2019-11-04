@@ -25,12 +25,12 @@ object Registry {
     lateinit var nfcAdapter: NfcAdapter
         private set
 
-    fun init(activity: Activity) {
+    fun init(activity: Activity, listener: ScriptListener) {
         pairingManager = PairingManager(activity)
         pinCache = PINCache()
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
-        scriptExecutor = CardScriptExecutor(activity)
+        scriptExecutor = CardScriptExecutor(activity, listener)
 
         cardManager = NFCCardManager()
         cardManager.setCardListener(scriptExecutor)
