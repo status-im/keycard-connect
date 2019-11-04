@@ -12,6 +12,10 @@ class PINCache {
     private val pins: MutableMap<ByteArrayKey, String> = HashMap()
     private val timestamps: MutableMap<Long, ByteArrayKey> = HashMap()
 
+    //This is needed to avoid passing PUK and new PIN with Intents, which could make unwanted copies
+    var pukAndPIN: Pair<String, String>? = null
+    private var latestPUKandPINHashCode: Int = 0
+
     private val scheduler: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
 
     init {
@@ -22,6 +26,15 @@ class PINCache {
         val now: Long = System.currentTimeMillis()
         timestamps.filterKeys { (now - it) < CACHE_VALIDITY }
         pins.filterKeys { timestamps.containsValue(it) }
+
+        //whatever happens, lets not leave PUK in cache more than 2 cache cleaning cycles
+        if (pukAndPIN != null) {
+            if (latestPUKandPINHashCode == pukAndPIN.hashCode()) {
+                pukAndPIN = null
+            } else {
+                latestPUKandPINHashCode = pukAndPIN.hashCode()
+            }
+        }
     }
 
     fun getPIN(instanceUID: ByteArray): String? {

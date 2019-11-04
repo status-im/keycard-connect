@@ -5,6 +5,8 @@ const val PAIRING_ACTIVITY_PASSWORD = "pairingPassword"
 const val PIN_ACTIVITY_ATTEMPTS = "remainingAttempts"
 const val PIN_ACTIVITY_CARD_UID = "cardUID"
 
+const val PUK_ACTIVITY_ATTEMPTS = PIN_ACTIVITY_ATTEMPTS
+
 const val INIT_ACTIVITY_PIN = "initPIN"
 const val INIT_ACTIVITY_PUK = "initPUK"
 const val INIT_ACTIVITY_PAIRING = "initPairing"
