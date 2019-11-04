@@ -35,7 +35,8 @@ class CardScriptExecutor(private val activity: Activity, private val listener: S
         script@for (cmd in runningScript) {
             when (cmd.run(executionContext)) {
                 CardCommand.Result.OK -> {}
-                CardCommand.Result.CANCEL -> { success = false; break@script}
+                CardCommand.Result.STOP -> { break@script }
+                CardCommand.Result.CANCEL -> { success = false; break@script }
                 CardCommand.Result.UX_ONGOING -> { waitingCmd = cmd; return }
                 CardCommand.Result.RETRY -> { return }
             }
