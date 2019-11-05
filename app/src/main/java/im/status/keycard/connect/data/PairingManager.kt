@@ -10,7 +10,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 
 class PairingManager(context: Context) {
-    private lateinit var sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences
 
     private fun id(instanceUID: ByteArray) : String {
         return Base64.encodeToString(instanceUID, NO_PADDING or NO_WRAP)

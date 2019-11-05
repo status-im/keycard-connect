@@ -3,11 +3,12 @@ package im.status.keycard.connect.card
 import android.app.Activity
 import android.content.Intent
 import im.status.keycard.applet.KeycardCommandSet
+import im.status.keycard.connect.Registry
 import im.status.keycard.io.CardChannel
 import im.status.keycard.io.CardListener
 
-class CardScriptExecutor(private val activity: Activity, private val listener: ScriptListener) : CardListener {
-    class ScriptContext(val activity: Activity, val cmdSet: KeycardCommandSet)
+class CardScriptExecutor(private val listener: ScriptListener) : CardListener {
+    data class ScriptContext(val activity: Activity, val cmdSet: KeycardCommandSet)
 
     enum class State {
         READY, UX_ONGOING, RUNNING
@@ -20,7 +21,7 @@ class CardScriptExecutor(private val activity: Activity, private val listener: S
     private var waitingCmd: CardCommand? = null
 
     override fun onConnected(channel: CardChannel) {
-        val executionContext = ScriptContext(activity, KeycardCommandSet(channel))
+        val executionContext = ScriptContext(Registry.mainActivity, KeycardCommandSet(channel))
 
         if (state == State.READY) {
             startScript()

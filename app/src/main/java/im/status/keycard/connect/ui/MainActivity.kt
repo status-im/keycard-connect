@@ -8,11 +8,15 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ViewSwitcher
+import com.google.zxing.integration.android.IntentIntegrator
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import kotlin.reflect.KClass
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import com.google.zxing.client.android.Intents
 
 class MainActivity : AppCompatActivity(), ScriptListener {
     private lateinit var viewSwitcher: ViewSwitcher
@@ -43,8 +47,9 @@ class MainActivity : AppCompatActivity(), ScriptListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQ_INTERACTIVE_SCRIPT) {
-            Registry.scriptExecutor.onUserInteractionReturned(resultCode, data)
+        when (requestCode) {
+            REQ_INTERACTIVE_SCRIPT -> Registry.scriptExecutor.onUserInteractionReturned(resultCode, data)
+            IntentIntegrator.REQUEST_CODE -> qrCodeScanned(resultCode, data)
         }
     }
 
@@ -64,6 +69,13 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         Registry.scriptExecutor.cancelScript()
     }
 
+    fun connectWallet(@Suppress("UNUSED_PARAMETER") view: View) {
+        val integrator = IntentIntegrator(this)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+        integrator.setOrientationLocked(false)
+        integrator.initiateScan()
+    }
+
     fun changePIN(@Suppress("UNUSED_PARAMETER") view: View) {
         startCommand(ChangePINActivity::class)
     }
@@ -71,5 +83,15 @@ class MainActivity : AppCompatActivity(), ScriptListener {
     private fun startCommand(activity: KClass<out Activity>) {
         val intent = Intent(this, activity.java)
         startActivity(intent)
+    }
+
+    private fun qrCodeScanned(resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK || data == null) return
+
+        val uri: String? = data.getStringExtra(Intents.Scan.RESULT)
+
+        if (uri != null && uri.startsWith("wc:")) {
+            Registry.walletConnect.connect(uri)
+        }
     }
 }

@@ -12,4 +12,5 @@
     <string name="change_pin">Change PIN</string>
     <string name="puk_prompt" >Insert your PUK</string>
     <string name="nfc_prompt">Tap your card</string>
+    <string name="connect_wallet" >Connect to WalletConnect</string>
 </resources>

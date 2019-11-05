@@ -7,7 +7,9 @@ import im.status.keycard.android.NFCCardManager
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.PINCache
 import im.status.keycard.connect.data.PairingManager
+import im.status.keycard.connect.walletconnect.SessionManager
 
+@SuppressLint("StaticFieldLeak")
 object Registry {
     lateinit var pinCache: PINCache
         private set
@@ -15,7 +17,9 @@ object Registry {
     lateinit var pairingManager: PairingManager
         private set
 
-    @SuppressLint("StaticFieldLeak")
+    lateinit var mainActivity: Activity
+        private set
+
     lateinit var scriptExecutor: CardScriptExecutor
         private set
 
@@ -25,15 +29,21 @@ object Registry {
     lateinit var nfcAdapter: NfcAdapter
         private set
 
+    lateinit var walletConnect: SessionManager
+
     fun init(activity: Activity, listener: ScriptListener) {
+        this.mainActivity = activity
+
         pairingManager = PairingManager(activity)
         pinCache = PINCache()
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
-        scriptExecutor = CardScriptExecutor(activity, listener)
+        scriptExecutor = CardScriptExecutor(listener)
 
         cardManager = NFCCardManager()
         cardManager.setCardListener(scriptExecutor)
         cardManager.start()
+
+        walletConnect = SessionManager()
     }
 }
