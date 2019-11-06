@@ -50,8 +50,9 @@ class SessionManager : ExportKeyCommand.Listener {
     }
 
     fun connect(uri: String) {
-
         scope.launch {
+            session?.kill()
+
             session = WCSession(
                 fromWCUri(uri),
                 MoshiPayloadAdapter(moshi),
