@@ -10,7 +10,10 @@
     <string name="title_activity_change_pin">ChangePINActivity</string>
     <string name="change_pin_prompt">New PIN</string>
     <string name="change_pin">Change PIN</string>
-    <string name="puk_prompt" >Insert your PUK</string>
+    <string name="puk_prompt">Insert your PUK</string>
     <string name="nfc_prompt">Tap your card</string>
-    <string name="connect_wallet" >Connect to WalletConnect</string>
+    <string name="connect_wallet">Connect to WalletConnect</string>
+    <string name="sign_button">Sign</string>
+    <string name="reject_button">Reject</string>
+    <string name="sign_text_label">Sign a message</string>
 </resources>

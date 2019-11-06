@@ -10,13 +10,14 @@
         android:required="true" />
 
     <application
-        android:hardwareAccelerated="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.SignMessageActivity"></activity>
         <activity android:name=".ui.PUKActivity" />
         <activity android:name=".ui.ChangePINActivity" />
         <activity android:name=".ui.InitActivity" />

@@ -17,6 +17,7 @@ import kotlin.reflect.KClass
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import com.google.zxing.client.android.Intents
+import im.status.keycard.connect.data.REQ_WALLETCONNECT
 
 class MainActivity : AppCompatActivity(), ScriptListener {
     private lateinit var viewSwitcher: ViewSwitcher
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity(), ScriptListener {
 
         when (requestCode) {
             REQ_INTERACTIVE_SCRIPT -> Registry.scriptExecutor.onUserInteractionReturned(resultCode, data)
+            REQ_WALLETCONNECT -> Registry.walletConnect.onUserInteractionReturned(resultCode, data)
             IntentIntegrator.REQUEST_CODE -> qrCodeScanned(resultCode, data)
         }
     }

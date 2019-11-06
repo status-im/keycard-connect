@@ -1,5 +1,7 @@
 package im.status.keycard.connect.walletconnect
 
+import android.app.Activity
+import android.content.Intent
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.status.keycard.applet.BIP32KeyPair
@@ -8,6 +10,9 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.ExportKeyCommand
 import im.status.keycard.connect.card.SignCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
+import im.status.keycard.connect.data.REQ_WALLETCONNECT
+import im.status.keycard.connect.data.SIGN_TEXT_MESSAGE
+import im.status.keycard.connect.ui.SignMessageActivity
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -30,6 +35,7 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
     private val sessionStore = FileWCSessionStore(File(Registry.mainActivity.filesDir, "wcSessions.json").apply { createNewFile() }, moshi)
     private var session: WCSession? = null
     private var requestId: Long = 0
+    private var action: (data: Intent?) -> Unit = this::nop
 
     private val sessionCB = object : Session.Callback {
         override fun onStatus(status: Session.Status) {
@@ -69,6 +75,10 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
                     session?.rejectRequest(call.id, 1L, "Not implemented yet")
                 }
 
+                "eth_signTransaction" -> {
+                    session?.rejectRequest(call.id, 1L, "Not implemented yet")
+                }
+
                 "eth_sendRawTransaction" -> {
                     session?.rejectRequest(call.id, 1L, "Not implemented yet")
                 }
@@ -79,12 +89,34 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
         }
 
         private fun signText(id: Long, message: String) {
-            requestId = id
             val msg = Hex.decode(if (message.startsWith("0x", true)) message.drop(2) else message)
-            val keccak256 = Keccak.Digest256()
-            val hash = keccak256.digest(byteArrayOf(0x19) + "Ethereum Signed Message:\n${msg.size}".toByteArray() +  msg)
-            Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
+            val text = String(msg)
+
+            requestId = id
+            action = {
+                val keccak256 = Keccak.Digest256()
+                val hash = keccak256.digest(byteArrayOf(0x19) + "Ethereum Signed Message:\n${msg.size}".toByteArray() + msg)
+                Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
+            }
+
+            val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
+                putExtra(SIGN_TEXT_MESSAGE, text)
+            }
+
+            Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
         }
+    }
+
+    private fun nop(@Suppress("UNUSED_PARAMETER") data: Intent?) { }
+
+    fun onUserInteractionReturned(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            action.invoke(data)
+        } else {
+            session?.rejectRequest(requestId, -1, "Rejected by user")
+        }
+
+        action = this::nop
     }
 
     fun connect(uri: String) {
@@ -114,7 +146,6 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
     override fun onResponse(signature: RecoverableSignature) {
         scope.launch {
             session?.approveRequest(requestId, "0x${toHexString(signature.r)}${toHexString(signature.s)}${toHexString(byteArrayOf(signature.recId.toByte()))}")
-            //session?.rejectRequest(requestId, -1, "Rejected by user")
         }
     }
 }
