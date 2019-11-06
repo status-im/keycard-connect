@@ -4,3 +4,4 @@ fun scriptWithSecureChannel(): List<CardCommand> = listOf(SelectCommand(), InitC
 fun scriptWithAuthentication(): List<CardCommand> = scriptWithSecureChannel().plus(VerifyPINCommand())
 fun cardCheckupScript(): List<CardCommand> = scriptWithSecureChannel().plus(CheckMasterKeyCommand()).plus(VerifyPINCommand()).plus(LoadKeyCommand())
 
+fun ByteArray.toHexString() = asUByteArray().joinToString("") { it.toString(16).padStart(2, '0') }
