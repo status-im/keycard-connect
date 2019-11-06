@@ -6,12 +6,12 @@ import im.status.keycard.applet.BIP32KeyPair
 import im.status.keycard.applet.RecoverableSignature
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.ExportKeyCommand
-import im.status.keycard.connect.card.SignListener
-import im.status.keycard.connect.card.SignMessageCommand
+import im.status.keycard.connect.card.SignCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import org.bouncycastle.jcajce.provider.digest.Keccak
 import org.bouncycastle.util.encoders.Hex
 import org.bouncycastle.util.encoders.Hex.toHexString
 import org.walletconnect.Session
@@ -19,7 +19,7 @@ import org.walletconnect.Session.Config.Companion.fromWCUri
 import org.walletconnect.impls.*
 import java.io.File
 
-class WalletConnect : ExportKeyCommand.Listener, SignListener {
+class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
     //TODO: Provide settings for these two
     private val bip39Path = "m/44'/60'/0'/0"
     private val chainID: Long = 1
@@ -81,7 +81,9 @@ class WalletConnect : ExportKeyCommand.Listener, SignListener {
         private fun signText(id: Long, message: String) {
             requestId = id
             val msg = Hex.decode(if (message.startsWith("0x", true)) message.drop(2) else message)
-            Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignMessageCommand(Registry.walletConnect, msg)))
+            val keccak256 = Keccak.Digest256()
+            val hash = keccak256.digest(byteArrayOf(0x19) + "Ethereum Signed Message:\n${msg.size}".toByteArray() +  msg)
+            Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
     }
 
@@ -109,14 +111,10 @@ class WalletConnect : ExportKeyCommand.Listener, SignListener {
         }
     }
 
-    override fun onResponse(signature: RecoverableSignature?) {
+    override fun onResponse(signature: RecoverableSignature) {
         scope.launch {
-            if (signature != null) {
-                session?.approveRequest(requestId, "0x${toHexString(signature.r)}${toHexString(signature.s)}${toHexString(byteArrayOf(signature.recId.toByte()))}")
-            } else {
-                session?.rejectRequest(requestId, -1, "Rejected by user")
-            }
-
+            session?.approveRequest(requestId, "0x${toHexString(signature.r)}${toHexString(signature.s)}${toHexString(byteArrayOf(signature.recId.toByte()))}")
+            //session?.rejectRequest(requestId, -1, "Rejected by user")
         }
     }
 }

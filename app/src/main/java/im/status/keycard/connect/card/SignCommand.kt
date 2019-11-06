@@ -1,15 +1,15 @@
 package im.status.keycard.connect.card
 
-import im.status.keycard.applet.BIP32KeyPair
 import im.status.keycard.applet.KeyPath
 import im.status.keycard.applet.KeycardCommandSet
+import im.status.keycard.applet.RecoverableSignature
 import im.status.keycard.io.APDUResponse
 import java.io.IOException
 import java.lang.Exception
 
-class ExportKeyCommand(private val listener: Listener, private val path: String? = null, private val makeCurrent: Boolean = true, private val publicOnly: Boolean = true) : CardCommand {
+class SignCommand(private val listener: Listener, private val hash: ByteArray, private val path: String? = null, private val makeCurrent: Boolean = true, private val pinless: Boolean = false) : CardCommand {
     interface Listener {
-        fun onResponse(keyPair: BIP32KeyPair)
+        fun onResponse(signature: RecoverableSignature)
     }
 
     override fun run(context: CardScriptExecutor.ScriptContext): CardCommand.Result {
@@ -20,15 +20,20 @@ class ExportKeyCommand(private val listener: Listener, private val path: String?
                 val currentPath = KeyPath(context.cmdSet.getStatus(KeycardCommandSet.GET_STATUS_P1_KEY_PATH).checkOK().data)
 
                 if (path != currentPath.toString()) {
-                    response = context.cmdSet.exportKey(path, makeCurrent, publicOnly)
+                    response = context.cmdSet.signWithPath(hash, path, makeCurrent)
                 }
             }
 
             if (response == null) {
-                response = context.cmdSet.exportCurrentKey(publicOnly)
+                response = if (pinless) {
+                    context.cmdSet.signPinless(hash)
+                } else {
+                    context.cmdSet.sign(hash)
+                }
             }
 
-            listener.onResponse(BIP32KeyPair.fromTLV(response?.checkOK()?.data))
+            val signature = RecoverableSignature(hash, response?.checkOK()?.data)
+            listener.onResponse(signature)
         } catch(e: IOException) {
             return CardCommand.Result.RETRY
         } catch (e: Exception) {
