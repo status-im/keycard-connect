@@ -17,11 +17,12 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.bouncycastle.jcajce.provider.digest.Keccak
-import org.bouncycastle.util.encoders.Hex
-import org.bouncycastle.util.encoders.Hex.toHexString
 import org.walletconnect.Session
 import org.walletconnect.Session.Config.Companion.fromWCUri
 import org.walletconnect.impls.*
+import org.walleth.khex.hexToByteArray
+import org.walleth.khex.toHexString
+import org.walleth.khex.toNoPrefixHexString
 import java.io.File
 
 class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
@@ -72,7 +73,14 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
                 }
 
                 "eth_signTypedData" -> {
-                    session?.rejectRequest(call.id, 1L, "Not implemented yet")
+                    val message = call.params?.get(1)
+
+                    if (message is Map<*, *>) {
+                        @Suppress("UNCHECKED_CAST")
+                        signTypedData(call.id, message as Map<String, String>)
+                    } else {
+                        session?.rejectRequest(call.id, 1L, "Invalid params")
+                    }
                 }
 
                 "eth_signTransaction" -> {
@@ -80,7 +88,13 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
                 }
 
                 "eth_sendRawTransaction" -> {
-                    session?.rejectRequest(call.id, 1L, "Not implemented yet")
+                    val signedTx = call.params?.first()
+
+                    if (signedTx is String) {
+                        relayTX(call.id, signedTx)
+                    } else {
+                        session?.rejectRequest(call.id, 1L, "Invalid params")
+                    }
                 }
 
                 else -> session?.rejectRequest(call.id, 1L, "Not implemented")
@@ -88,8 +102,14 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
 
         }
 
+        private fun relayTX(id: Long, signedTx: Any) {
+            // Ask confirmation and forward tx as-is through Infura
+            println(signedTx)
+            session?.rejectRequest(id, 1L, "Not implemented yet")
+        }
+
         private fun signText(id: Long, message: String) {
-            val msg = Hex.decode(if (message.startsWith("0x", true)) message.drop(2) else message)
+            val msg = message.hexToByteArray()
             val text = String(msg)
 
             requestId = id
@@ -104,6 +124,10 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
             }
 
             Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
+        }
+
+        private fun signTypedData(id: Long, message: Map<String, String>) {
+            session?.rejectRequest(id, 1L, "Not implemented yet")
         }
     }
 
@@ -138,14 +162,14 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
 
     override fun onResponse(keyPair: BIP32KeyPair) {
         scope.launch {
-            val addr = "0x${toHexString(keyPair.toEthereumAddress())}"
+            val addr = keyPair.toEthereumAddress().toHexString()
             session?.approve(listOf(addr), chainID)
         }
     }
 
     override fun onResponse(signature: RecoverableSignature) {
         scope.launch {
-            session?.approveRequest(requestId, "0x${toHexString(signature.r)}${toHexString(signature.s)}${toHexString(byteArrayOf(signature.recId.toByte()))}")
+            session?.approveRequest(requestId, "0x${signature.r.toNoPrefixHexString()}${signature.s.toNoPrefixHexString()}${(signature.recId + 27).toByte().toHexString()}")
         }
     }
 }
