@@ -30,6 +30,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    packagingOptions {
+        exclude 'META-INF/main.kotlin_module'
+    }
+
+    packagingOptions {
+        pickFirst 'META-INF/kotlinx-io.kotlin_module'
+        pickFirst 'META-INF/atomicfu.kotlin_module'
+        pickFirst 'META-INF/kotlinx-coroutines-io.kotlin_module'
+    }
 }
 
 dependencies {
@@ -55,6 +65,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.2.1'
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.1'
     implementation "com.github.komputing.kethereum:extensions:$kethereum_version"
+    implementation "com.github.komputing.kethereum:model:$kethereum_version"
+    implementation "com.github.komputing.kethereum:functions:$kethereum_version"
+    implementation "com.github.komputing.kethereum:rpc:$kethereum_version"
     implementation "com.github.komputing.kethereum:rlp:$kethereum_version"
     implementation 'com.github.komputing:khex:0.6'
     testImplementation 'junit:junit:4.12'

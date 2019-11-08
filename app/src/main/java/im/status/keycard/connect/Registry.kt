@@ -7,7 +7,7 @@ import im.status.keycard.android.NFCCardManager
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.PINCache
 import im.status.keycard.connect.data.PairingManager
-import im.status.keycard.connect.walletconnect.WalletConnect
+import im.status.keycard.connect.net.WalletConnect
 
 @SuppressLint("StaticFieldLeak")
 object Registry {

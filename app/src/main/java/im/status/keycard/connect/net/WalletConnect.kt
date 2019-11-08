@@ -1,4 +1,4 @@
-package im.status.keycard.connect.walletconnect
+package im.status.keycard.connect.net
 
 import android.app.Activity
 import android.content.Intent
@@ -17,6 +17,8 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.bouncycastle.jcajce.provider.digest.Keccak
+import org.kethereum.model.Transaction
+import org.kethereum.model.createEmptyTransaction
 import org.walletconnect.Session
 import org.walletconnect.Session.Config.Companion.fromWCUri
 import org.walletconnect.impls.*
@@ -54,88 +56,97 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener {
                 when (call) {
                     is Session.MethodCall.SessionRequest -> Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(ExportKeyCommand(Registry.walletConnect, bip39Path)))
                     is Session.MethodCall.SignMessage -> signText(call.id, call.message)
-                    is Session.MethodCall.SendTransaction -> session?.rejectRequest(call.id, 1L, "Not implemented yet")
+                    is Session.MethodCall.SendTransaction -> signTransaction(call.id, toTransaction(call), false)
                     is Session.MethodCall.Custom -> onCustomCall(call)
                 }
             }
         }
 
+        // would be more elegant with a single inline generic function with reified type, but apparently in Kotlin 1.3.50 code generation fails if I make this function inline.
+        // TODO: check newer version of Kotlin
+        private fun runOnValidParam(call: Session.MethodCall.Custom, body: (String) -> Unit) {
+            val param = call.params?.firstOrNull()
+            if (param is String) {
+                body(param)
+            } else {
+                session?.rejectRequest(call.id, 1L, "Invalid params")
+            }
+        }
+
+        private fun runOnValidParam(call: Session.MethodCall.Custom, index: Int, body: (Map<*, *>) -> Unit) {
+            val param = call.params?.getOrNull(index)
+
+            if (param is Map<*, *>) {
+                body(param)
+            } else {
+                session?.rejectRequest(call.id, 1L, "Invalid params")
+            }
+        }
+
         private fun onCustomCall(call: Session.MethodCall.Custom) {
             when(call.method) {
-                "personal_sign" -> {
-                    val message = call.params?.first()
-
-                    if (message is String) {
-                        signText(call.id, message)
-                    } else {
-                        session?.rejectRequest(call.id, 1L, "Invalid params")
-                    }
-                }
-
-                "eth_signTypedData" -> {
-                    val message = call.params?.get(1)
-
-                    if (message is Map<*, *>) {
-                        @Suppress("UNCHECKED_CAST")
-                        signTypedData(call.id, message as Map<String, String>)
-                    } else {
-                        session?.rejectRequest(call.id, 1L, "Invalid params")
-                    }
-                }
-
-                "eth_signTransaction" -> {
-                    session?.rejectRequest(call.id, 1L, "Not implemented yet")
-                }
-
-                "eth_sendRawTransaction" -> {
-                    val signedTx = call.params?.first()
-
-                    if (signedTx is String) {
-                        relayTX(call.id, signedTx)
-                    } else {
-                        session?.rejectRequest(call.id, 1L, "Invalid params")
-                    }
-                }
-
+                "personal_sign" -> runOnValidParam(call) { signText(call.id, it) }
+                "eth_signTypedData" -> { runOnValidParam(call, 1) { @Suppress("UNCHECKED_CAST") signTypedData(call.id, it as Map<String, String>) } }
+                "eth_signTransaction" -> { runOnValidParam(call, 0) { signTransaction(call.id, toTransaction(toSendTransaction(call.id, it)), false)} }
+                "eth_sendRawTransaction" -> { runOnValidParam(call) { relayTX(call.id, it) } }
                 else -> session?.rejectRequest(call.id, 1L, "Not implemented")
             }
-
         }
 
-        private fun relayTX(id: Long, signedTx: Any) {
-            // Ask confirmation and forward tx as-is through Infura
-            println(signedTx)
-            session?.rejectRequest(id, 1L, "Not implemented yet")
+        private fun toSendTransaction(id: Long, data: Map<*, *>): Session.MethodCall.SendTransaction {
+            val from = data["from"] as? String ?: throw IllegalArgumentException("from key missing")
+            val to = data["to"] as? String ?: throw IllegalArgumentException("to key missing")
+            val nonce = data["nonce"] as? String ?: (data["nonce"] as? Double)?.toLong()?.toString()
+            val gasPrice = data["gasPrice"] as? String
+            val gasLimit = data["gasLimit"] as? String
+            val value = data["value"] as? String ?: throw IllegalArgumentException("value key missing")
+            val txData = data["data"] as? String ?: throw IllegalArgumentException("data key missing")
+            return Session.MethodCall.SendTransaction(id, from, to, nonce, gasPrice, gasLimit, value, txData)
         }
 
-        private fun signText(id: Long, message: String) {
-            val msg = message.hexToByteArray()
-            val text = String(msg)
+        private fun toTransaction(tx: Session.MethodCall.SendTransaction): Transaction {
+            return createEmptyTransaction()
+        }
+    }
 
-            requestId = id
-            action = {
-                val keccak256 = Keccak.Digest256()
-                val hash = keccak256.digest(byteArrayOf(0x19) + "Ethereum Signed Message:\n${msg.size}".toByteArray() + msg)
-                Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
-            }
+    private fun relayTX(id: Long, signedTx: String) {
+        requestId = id
+        session?.rejectRequest(id, 1L, "Not implemented yet")
+    }
 
-            val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
-                putExtra(SIGN_TEXT_MESSAGE, text)
-            }
+    private fun signText(id: Long, message: String) {
+        val msg = message.hexToByteArray()
+        val text = String(msg)
 
-            Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
+        requestId = id
+        action = {
+            val keccak256 = Keccak.Digest256()
+            val hash = keccak256.digest(byteArrayOf(0x19) + "Ethereum Signed Message:\n${msg.size}".toByteArray() + msg)
+            Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
-        private fun signTypedData(id: Long, message: Map<String, String>) {
-            session?.rejectRequest(id, 1L, "Not implemented yet")
+        val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
+            putExtra(SIGN_TEXT_MESSAGE, text)
         }
+
+        Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
+    }
+
+    private fun signTypedData(id: Long, message: Map<String, String>) {
+        requestId = id
+        session?.rejectRequest(id, 1L, "Not implemented yet")
+    }
+
+    private fun signTransaction(id: Long, tx: Transaction, send: Boolean) {
+        requestId = id
+        session?.rejectRequest(id, 1L, "Not implemented yet")
     }
 
     private fun nop(@Suppress("UNUSED_PARAMETER") data: Intent?) { }
 
     fun onUserInteractionReturned(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            action.invoke(data)
+            action(data)
         } else {
             session?.rejectRequest(requestId, -1, "Rejected by user")
         }
