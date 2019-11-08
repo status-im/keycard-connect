@@ -17,3 +17,5 @@ const val REQ_INTERACTIVE_SCRIPT = 0x01
 const val REQ_WALLETCONNECT = 0x02
 
 const val CACHE_VALIDITY = 15 * 60 * 1000
+
+const val RPC_ENDPOINT = "http://mainnet.infura.io/v3/27efcb33f94e4bd0866d1aadf8e1a12d"
