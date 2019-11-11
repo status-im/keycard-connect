@@ -1,6 +1,6 @@
 package im.status.keycard.connect.net
 
-import org.kethereum.extensions.hexToBigInteger
+import org.kethereum.extensions.maybeHexToBigInteger
 import org.kethereum.rpc.HttpEthereumRPC
 import org.kethereum.rpc.model.StringResultResponse
 import java.io.IOException
@@ -22,11 +22,11 @@ class EthereumRPC(endpointURL: String) {
     }
 
     fun ethGetTransactionCount(address: String): BigInteger {
-        return valueOrThrow(endpoint.getTransactionCount(address)) { it.hexToBigInteger() }
+        return valueOrThrow(endpoint.getTransactionCount(address)) { it.maybeHexToBigInteger() }
     }
 
     fun ethGasPrice(): BigInteger {
-        return valueOrThrow(endpoint.gasPrice()) { it.hexToBigInteger() }
+        return valueOrThrow(endpoint.gasPrice()) { it.maybeHexToBigInteger() }
     }
 
     fun ethSendRawTransaction(rawTx: String): String {
