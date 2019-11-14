@@ -7,9 +7,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.status.keycard.android.NFCCardManager
 import im.status.keycard.connect.card.*
-import im.status.keycard.connect.data.PINCache
-import im.status.keycard.connect.data.PairingManager
-import im.status.keycard.connect.data.RPC_ENDPOINT
+import im.status.keycard.connect.data.*
 import im.status.keycard.connect.net.EthereumRPC
 import im.status.keycard.connect.net.WalletConnect
 
@@ -64,8 +62,8 @@ object Registry {
         cardManager.setCardListener(scriptExecutor)
         cardManager.start()
 
-        //TODO: endpoint should be configurable
+        //TODO: should be configurable
         ethereumRPC = EthereumRPC(RPC_ENDPOINT)
-        walletConnect = WalletConnect()
+        walletConnect = WalletConnect(BIP32_PATH, CHAIN_ID)
     }
 }

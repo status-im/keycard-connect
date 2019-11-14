@@ -9,9 +9,9 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.ExportKeyCommand
 import im.status.keycard.connect.card.SignCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
-import im.status.keycard.connect.data.REQ_WALLETCONNECT
-import im.status.keycard.connect.data.SIGN_TEXT_MESSAGE
+import im.status.keycard.connect.data.*
 import im.status.keycard.connect.ui.SignMessageActivity
+import im.status.keycard.connect.ui.SignTransactionActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -20,6 +20,9 @@ import org.kethereum.DEFAULT_GAS_LIMIT
 import org.kethereum.extensions.maybeHexToBigInteger
 import org.kethereum.extensions.toBigInteger
 import org.kethereum.functions.encodeRLP
+import org.kethereum.functions.getTokenTransferTo
+import org.kethereum.functions.getTokenTransferValue
+import org.kethereum.functions.isTokenTransfer
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.*
 import org.walletconnect.Session
@@ -30,11 +33,9 @@ import org.walleth.khex.toHexString
 import org.walleth.khex.toNoPrefixHexString
 import java.io.File
 import java.lang.Exception
+import java.math.BigInteger
 
-class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
-    //TODO: Provide settings for these two
-    private val bip39Path = "m/44'/60'/0'/0"
-    private val chainID: Long = 1
+class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
 
     private val scope = MainScope()
     private val moshi = Moshi.Builder().build()
@@ -58,7 +59,7 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener, Session.C
     override fun onMethodCall(call: Session.MethodCall) {
         scope.launch(Dispatchers.IO) {
             when (call) {
-                is Session.MethodCall.SessionRequest -> Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(ExportKeyCommand(Registry.walletConnect, bip39Path)))
+                is Session.MethodCall.SessionRequest -> Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(ExportKeyCommand(Registry.walletConnect, bip32Path)))
                 is Session.MethodCall.SignMessage -> signText(call.id, call.message)
                 is Session.MethodCall.SendTransaction -> signTransaction(call.id, toTransaction(call), true)
                 is Session.MethodCall.Custom -> onCustomCall(call)
@@ -155,9 +156,18 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener, Session.C
             }
         }
 
-        //TODO: change this to a real transaction activity
-        val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
-            putExtra(SIGN_TEXT_MESSAGE, "this is a transaction")
+        val intent = Intent(Registry.mainActivity, SignTransactionActivity::class.java).apply {
+            if (tx.isTokenTransfer()) {
+                putExtra(SIGN_TX_AMOUNT, tx.getTokenTransferValue().toString(10))
+                //TODO: Replace with short name
+                putExtra(SIGN_TX_CURRENCY, tx.to?.hex)
+                putExtra(SIGN_TX_TO, tx.getTokenTransferTo().hex)
+            } else {
+                putExtra(SIGN_TX_AMOUNT, tx.value?.toString(10))
+                putExtra(SIGN_TX_CURRENCY, "ETH")
+                putExtra(SIGN_TX_TO, tx.to?.hex)
+                putExtra(SIGN_TX_DATA, tx.input.toNoPrefixHexString())
+            }
         }
 
         Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)

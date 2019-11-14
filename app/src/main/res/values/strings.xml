@@ -16,4 +16,6 @@
     <string name="sign_button">Sign</string>
     <string name="reject_button">Reject</string>
     <string name="sign_text_label">Sign a message</string>
+    <string name="sign_tx_label">Sign transaction</string>
+    <string name="sign_tx_to_label">To</string>
 </resources>
