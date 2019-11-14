@@ -16,12 +16,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import org.bouncycastle.jcajce.provider.digest.Keccak
 import org.kethereum.DEFAULT_GAS_LIMIT
 import org.kethereum.extensions.maybeHexToBigInteger
 import org.kethereum.extensions.toBigInteger
-import org.kethereum.functions.calculateHash
 import org.kethereum.functions.encodeRLP
+import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.*
 import org.walletconnect.Session
 import org.walletconnect.Session.Config.Companion.fromWCUri
@@ -120,8 +119,7 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener, Session.C
 
         requestId = id
         uiAction = {
-            val keccak256 = Keccak.Digest256()
-            val hash = keccak256.digest(byteArrayOf(0x19) + "Ethereum Signed Message:\n${msg.size}".toByteArray() + msg)
+            val hash = (byteArrayOf(0x19) + "Ethereum Signed Message:\n${msg.size}".toByteArray() + msg).keccak()
             Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
@@ -143,13 +141,13 @@ class WalletConnect : ExportKeyCommand.Listener, SignCommand.Listener, Session.C
         requestId = id
 
         uiAction = {
-            val hash = tx.calculateHash()
+            val hash = tx.encodeRLP(SignatureData(v = chainID.toBigInteger())).keccak()
             Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
         signAction = {
             try {
-                val signedTx = SignedTransaction(tx, SignatureData(it.r.toBigInteger(), it.s.toBigInteger(), (it.recId + 27).toBigInteger())).encodeRLP().toHexString()
+                val signedTx = SignedTransaction(tx, SignatureData(it.r.toBigInteger(), it.s.toBigInteger(), (it.recId + (chainID * 2) + 35).toBigInteger())).encodeRLP().toHexString()
                 val res = if (send) Registry.ethereumRPC.ethSendRawTransaction(signedTx) else signedTx
                 session?.approveRequest(requestId, res)
             } catch(e: Exception) {

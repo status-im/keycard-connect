@@ -68,7 +68,7 @@ dependencies {
     implementation "com.github.komputing.kethereum:model:$kethereum_version"
     implementation "com.github.komputing.kethereum:functions:$kethereum_version"
     implementation "com.github.komputing.kethereum:rpc:$kethereum_version"
-    implementation "com.github.komputing.kethereum:rlp:$kethereum_version"
+    implementation "com.github.komputing.kethereum:keccak_shortcut:$kethereum_version"
     implementation 'com.github.komputing:khex:0.6'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
