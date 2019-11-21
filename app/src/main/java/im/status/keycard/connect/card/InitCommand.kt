@@ -30,6 +30,7 @@ class InitCommand : CardCommand {
                 context.cmdSet.select().checkOK()
                 context.cmdSet.autoPair(initPairing)
                 Registry.pairingManager.putPairing(context.cmdSet.applicationInfo.instanceUID, context.cmdSet.pairing)
+                Registry.pinCache.putPIN(context.cmdSet.applicationInfo.instanceUID, initPIN!!)
                 CardCommand.Result.OK
             } catch (e: IOException) {
                 CardCommand.Result.RETRY
