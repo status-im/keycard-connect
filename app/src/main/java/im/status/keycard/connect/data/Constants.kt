@@ -18,6 +18,14 @@ const val SIGN_TX_CURRENCY = "signTxCurrency"
 const val SIGN_TX_DATA = "signTxData"
 const val SIGN_TX_TO = "signTxTo"
 
+const val LOAD_TYPE = "loadKeyType"
+const val LOAD_NONE = -1
+const val LOAD_IMPORT_BIP39 = 0
+const val LOAD_GENERATE_BIP39 = 1
+const val LOAD_GENERATE = 2
+const val LOAD_MNEMONIC = "loadKeyMnemonic"
+
+
 const val REQ_INTERACTIVE_SCRIPT = 0x01
 const val REQ_WALLETCONNECT = 0x02
 

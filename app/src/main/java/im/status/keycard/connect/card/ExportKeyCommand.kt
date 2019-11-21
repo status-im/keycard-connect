@@ -13,7 +13,7 @@ class ExportKeyCommand(private val listener: Listener, private val path: String?
     }
 
     override fun run(context: CardScriptExecutor.ScriptContext): CardCommand.Result {
-        try {
+        return runOnCard {
             var response: APDUResponse? = null
 
             if (path != null) {
@@ -29,12 +29,6 @@ class ExportKeyCommand(private val listener: Listener, private val path: String?
             }
 
             listener.onResponse(BIP32KeyPair.fromTLV(response?.checkOK()?.data))
-        } catch(e: IOException) {
-            return CardCommand.Result.RETRY
-        } catch (e: Exception) {
-            return CardCommand.Result.CANCEL
         }
-
-        return CardCommand.Result.OK
     }
 }

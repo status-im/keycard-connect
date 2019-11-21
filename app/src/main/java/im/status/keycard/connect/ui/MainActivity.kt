@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(), ScriptListener {
     override fun onScriptFinished(result: CardCommand.Result) {
         this.runOnUiThread {
             viewSwitcher.showNext()
+            Registry.scriptExecutor.defaultScript = cardCheckupScript()
         }
     }
 

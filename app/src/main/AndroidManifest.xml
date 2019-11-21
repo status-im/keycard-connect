@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.SignTransactionActivity"></activity>
+        <activity android:name=".ui.LoadKeyActivity"></activity>
+        <activity android:name=".ui.SignTransactionActivity" />
         <activity android:name=".ui.SignMessageActivity" />
         <activity android:name=".ui.PUKActivity" />
         <activity android:name=".ui.ChangePINActivity" />

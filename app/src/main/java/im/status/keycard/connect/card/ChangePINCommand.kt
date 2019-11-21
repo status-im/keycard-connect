@@ -7,15 +7,9 @@ import java.lang.Exception
 class ChangePINCommand(private val newPIN: String) : CardCommand {
     //TODO: like for the PINCache, no strings should be used here
     override fun run(context: CardScriptExecutor.ScriptContext): CardCommand.Result {
-        try {
+        return runOnCard {
             context.cmdSet.changePIN(newPIN).checkOK()
             Registry.pinCache.putPIN(context.cmdSet.applicationInfo.instanceUID, newPIN)
-        } catch(e: IOException) {
-            return CardCommand.Result.RETRY
-        } catch (e: Exception) {
-            return CardCommand.Result.CANCEL
         }
-
-        return CardCommand.Result.OK
     }
 }

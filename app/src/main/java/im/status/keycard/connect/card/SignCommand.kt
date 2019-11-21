@@ -13,7 +13,7 @@ class SignCommand(private val listener: Listener, private val hash: ByteArray, p
     }
 
     override fun run(context: CardScriptExecutor.ScriptContext): CardCommand.Result {
-        try {
+        return runOnCard {
             var response: APDUResponse? = null
 
             if (path != null) {
@@ -34,12 +34,6 @@ class SignCommand(private val listener: Listener, private val hash: ByteArray, p
 
             val signature = RecoverableSignature(hash, response?.checkOK()?.data)
             listener.onResponse(signature)
-        } catch(e: IOException) {
-            return CardCommand.Result.RETRY
-        } catch (e: Exception) {
-            return CardCommand.Result.CANCEL
         }
-
-        return CardCommand.Result.OK
     }
 }
