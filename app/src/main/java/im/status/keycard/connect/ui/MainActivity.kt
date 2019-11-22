@@ -105,8 +105,10 @@ class MainActivity : AppCompatActivity(), ScriptListener {
     }
 
     private fun loadKeyHandler(resultCode: Int, data: Intent?) {
-        val loadType = data?.getIntExtra(LOAD_TYPE, LOAD_NONE) ?: LOAD_NONE
-        val mnemonic = data?.getStringExtra(LOAD_MNEMONIC)
+        if (resultCode != Activity.RESULT_OK || data == null) return
+
+        val loadType = data.getIntExtra(LOAD_TYPE, LOAD_NONE)
+        val mnemonic = data.getStringExtra(LOAD_MNEMONIC)
 
         Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(LoadKeyCommand(loadType, mnemonic)))
     }
