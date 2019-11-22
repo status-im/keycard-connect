@@ -12,12 +12,11 @@ import com.google.zxing.integration.android.IntentIntegrator
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
-import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import kotlin.reflect.KClass
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import com.google.zxing.client.android.Intents
-import im.status.keycard.connect.data.REQ_WALLETCONNECT
+import im.status.keycard.connect.data.*
 
 class MainActivity : AppCompatActivity(), ScriptListener {
     private lateinit var viewSwitcher: ViewSwitcher
@@ -51,6 +50,7 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         when (requestCode) {
             REQ_INTERACTIVE_SCRIPT -> Registry.scriptExecutor.onUserInteractionReturned(resultCode, data)
             REQ_WALLETCONNECT -> Registry.walletConnect.onUserInteractionReturned(resultCode, data)
+            REQ_LOADKEY -> loadKeyHandler(resultCode, data)
             IntentIntegrator.REQUEST_CODE -> qrCodeScanned(resultCode, data)
         }
     }
@@ -100,7 +100,15 @@ class MainActivity : AppCompatActivity(), ScriptListener {
     }
 
     fun changeKey(@Suppress("UNUSED_PARAMETER") view: View) {
-        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(LoadKeyCommand()))
+        val intent = Intent(this, LoadKeyActivity::class.java)
+        this.startActivityForResult(intent, REQ_LOADKEY)
+    }
+
+    private fun loadKeyHandler(resultCode: Int, data: Intent?) {
+        val loadType = data?.getIntExtra(LOAD_TYPE, LOAD_NONE) ?: LOAD_NONE
+        val mnemonic = data?.getStringExtra(LOAD_MNEMONIC)
+
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(LoadKeyCommand(loadType, mnemonic)))
     }
 
     fun removeKey(@Suppress("UNUSED_PARAMETER") view: View) {

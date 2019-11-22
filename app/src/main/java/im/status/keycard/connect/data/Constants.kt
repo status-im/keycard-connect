@@ -29,6 +29,7 @@ const val MNEMONIC_PHRASE = "mnemonicPhrase"
 
 const val REQ_INTERACTIVE_SCRIPT = 0x01
 const val REQ_WALLETCONNECT = 0x02
+const val REQ_LOADKEY = 0x03
 
 const val CACHE_VALIDITY = 15 * 60 * 1000
 
