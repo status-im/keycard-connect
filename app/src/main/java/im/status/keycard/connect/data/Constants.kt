@@ -25,6 +25,7 @@ const val LOAD_GENERATE_BIP39 = 1
 const val LOAD_GENERATE = 2
 const val LOAD_MNEMONIC = "loadKeyMnemonic"
 
+const val MNEMONIC_PHRASE = "mnemonicPhrase"
 
 const val REQ_INTERACTIVE_SCRIPT = 0x01
 const val REQ_WALLETCONNECT = 0x02

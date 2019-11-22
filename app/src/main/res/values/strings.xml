@@ -7,7 +7,6 @@
     <string name="pin_label">PIN</string>
     <string name="puk_label">PUK</string>
     <string name="pairing_label">Pairing password</string>
-    <string name="title_activity_change_pin">ChangePINActivity</string>
     <string name="change_pin_prompt">New PIN</string>
     <string name="change_pin">Change PIN</string>
     <string name="puk_prompt">Insert your PUK</string>
@@ -19,9 +18,11 @@
     <string name="sign_tx_label">Sign transaction</string>
     <string name="sign_tx_to_label">To</string>
     <string name="load_key_generate_oncard">Generate on card</string>
-    <string name="load_generate_on_card_label" >Generate keys on card without BIP39 mnemonic. Maximum security, but no backup possible.</string>
-    <string name="load_import_mnemonic" >Import Mnemonic</string>
+    <string name="load_generate_on_card_label">Generate keys on card without BIP39 mnemonic. Maximum security, but no backup possible.</string>
+    <string name="load_import_mnemonic">Import Mnemonic</string>
     <string name="load_import_mnemonic_label">Import BIP39 Mnemonic</string>
-    <string name="load_generate_mnemonic" >Generate BIP39 Mnemonic</string>
+    <string name="load_generate_mnemonic">Generate BIP39 Mnemonic</string>
     <string name="load_generate_mnemonic_label">Generate and load BIP39 mnemonic. You will be shown the mnemonic after it is loaded</string>
+    <string name="mnemonic_ok_button">I have wrote these words down</string>
+    <string name="mnemonic_label">Please write these words down. They won\'t be presented again and there is no way to recover them.</string>
 </resources>
