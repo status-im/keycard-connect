@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.EditText
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
-import im.status.keycard.connect.card.CardCommand
 import im.status.keycard.connect.card.ChangePINCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
 

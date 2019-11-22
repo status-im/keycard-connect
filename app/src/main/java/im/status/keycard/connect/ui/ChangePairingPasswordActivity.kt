@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.EditText
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
-import im.status.keycard.connect.card.ChangePUKCommand
 import im.status.keycard.connect.card.ChangePairingPasswordCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
 

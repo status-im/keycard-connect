@@ -13,8 +13,6 @@ import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
 import kotlin.reflect.KClass
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
 import com.google.zxing.client.android.Intents
 import im.status.keycard.connect.data.*
 
@@ -104,6 +102,10 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         this.startActivityForResult(intent, REQ_LOADKEY)
     }
 
+    fun removeKey(@Suppress("UNUSED_PARAMETER") view: View) {
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(RemoveKeyCommand()))
+    }
+
     private fun loadKeyHandler(resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK || data == null) return
 
@@ -111,10 +113,6 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         val mnemonic = data.getStringExtra(LOAD_MNEMONIC)
 
         Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(LoadKeyCommand(loadType, mnemonic)))
-    }
-
-    fun removeKey(@Suppress("UNUSED_PARAMETER") view: View) {
-        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(RemoveKeyCommand()))
     }
 
     private fun startCommand(activity: KClass<out Activity>) {
