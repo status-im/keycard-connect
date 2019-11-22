@@ -7,8 +7,6 @@ import im.status.keycard.applet.Mnemonic
 import im.status.keycard.connect.data.*
 import im.status.keycard.connect.ui.LoadKeyActivity
 import im.status.keycard.connect.ui.ShowMnemonicActivity
-import java.io.IOException
-import java.lang.Exception
 
 class LoadKeyCommand(private var loadType: Int = LOAD_NONE, private var mnemonic: String? = null) : CardCommand {
     private fun promptKey(activity: Activity) : CardCommand.Result {

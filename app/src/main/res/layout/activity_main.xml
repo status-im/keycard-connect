@@ -10,25 +10,89 @@
 
     <Button
         android:id="@+id/changePINButton"
-        android:layout_width="wrap_content"
+        android:layout_width="236dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:onClick="changePIN"
         android:text="@string/change_pin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/walletConnectButton" />
 
     <Button
         android:id="@+id/walletConnectButton"
-        android:layout_width="wrap_content"
+        android:layout_width="236dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:onClick="connectWallet"
         android:text="@string/connect_wallet"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.553"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/changePUKButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="changePUK"
+        android:text="@string/change_puk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changePINButton" />
+
+    <Button
+        android:id="@+id/changePairingPasswordButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="changePairingPassword"
+        android:text="@string/change_pairing_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changePUKButton" />
+
+    <Button
+        android:id="@+id/unpairButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="unpair"
+        android:text="@string/unpair"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changePairingPasswordButton" />
+
+    <Button
+        android:id="@+id/unpairOthers"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="unpairOthers"
+        android:text="@string/unpair_others"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unpairButton" />
+
+    <Button
+        android:id="@+id/changeKeyButton"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="changeKey"
+        android:text="@string/change_key"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unpairOthers" />
+
+    <Button
+        android:id="@+id/removeKey"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="removeKey"
+        android:text="@string/remove_key"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeKeyButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

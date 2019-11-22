@@ -25,4 +25,12 @@
     <string name="load_generate_mnemonic_label">Generate and load BIP39 mnemonic. You will be shown the mnemonic after it is loaded</string>
     <string name="mnemonic_ok_button">I have wrote these words down</string>
     <string name="mnemonic_label">Please write these words down. They won\'t be presented again and there is no way to recover them.</string>
+    <string name="change_puk">Change PUK</string>
+    <string name="change_pairing_password">Change pairing password</string>
+    <string name="unpair">Unpair</string>
+    <string name="unpair_others">Unpair Others</string>
+    <string name="change_key">Change Key</string>
+    <string name="remove_key">Remove key</string>
+    <string name="change_puk_prompt">New PUK</string>
+    <string name="change_pairing_password_prompt">New pairing password</string>
 </resources>

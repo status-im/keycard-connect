@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ChangePINActivity">
+    tools:context=".ui.ChangePUKActivity">
 
     <TextView
-        android:id="@+id/newPinPrompt"
+        android:id="@+id/newPukPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="@string/change_pin_prompt"
+        android:text="@string/change_puk_prompt"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,10 +36,10 @@
         android:onClick="cancel"
         android:text="@android:string/cancel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPINText" />
+        app:layout_constraintTop_toBottomOf="@+id/newPUKText" />
 
     <EditText
-        android:id="@+id/newPINText"
+        android:id="@+id/newPUKText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
@@ -47,6 +47,6 @@
         android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPinPrompt"
+        app:layout_constraintTop_toBottomOf="@+id/newPukPrompt"
         tools:text="123456" />
 </androidx.constraintlayout.widget.ConstraintLayout>

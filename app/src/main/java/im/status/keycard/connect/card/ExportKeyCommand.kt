@@ -4,8 +4,6 @@ import im.status.keycard.applet.BIP32KeyPair
 import im.status.keycard.applet.KeyPath
 import im.status.keycard.applet.KeycardCommandSet
 import im.status.keycard.io.APDUResponse
-import java.io.IOException
-import java.lang.Exception
 
 class ExportKeyCommand(private val listener: Listener, private val path: String? = null, private val makeCurrent: Boolean = true, private val publicOnly: Boolean = true) : CardCommand {
     interface Listener {

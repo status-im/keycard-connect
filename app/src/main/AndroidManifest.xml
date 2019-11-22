@@ -17,6 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.ChangePairingPasswordActivity"></activity>
+        <activity android:name=".ui.ChangePUKActivity" />
         <activity android:name=".ui.ShowMnemonicActivity" />
         <activity android:name=".ui.LoadKeyActivity" />
         <activity android:name=".ui.SignTransactionActivity" />

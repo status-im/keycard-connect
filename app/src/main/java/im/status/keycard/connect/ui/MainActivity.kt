@@ -83,6 +83,30 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         startCommand(ChangePINActivity::class)
     }
 
+    fun changePUK(@Suppress("UNUSED_PARAMETER") view: View) {
+        startCommand(ChangePUKActivity::class)
+    }
+
+    fun changePairingPassword(@Suppress("UNUSED_PARAMETER") view: View) {
+        startCommand(ChangePairingPasswordActivity::class)
+    }
+
+    fun unpair(@Suppress("UNUSED_PARAMETER") view: View) {
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(UnpairCommand()))
+    }
+
+    fun unpairOthers(@Suppress("UNUSED_PARAMETER") view: View) {
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(UnpairOthersCommand()))
+    }
+
+    fun changeKey(@Suppress("UNUSED_PARAMETER") view: View) {
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(LoadKeyCommand()))
+    }
+
+    fun removeKey(@Suppress("UNUSED_PARAMETER") view: View) {
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(RemoveKeyCommand()))
+    }
+
     private fun startCommand(activity: KClass<out Activity>) {
         val intent = Intent(this, activity.java)
         startActivity(intent)

@@ -6,20 +6,20 @@ import android.view.View
 import android.widget.EditText
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
-import im.status.keycard.connect.card.CardCommand
-import im.status.keycard.connect.card.ChangePINCommand
+import im.status.keycard.connect.card.ChangePUKCommand
+import im.status.keycard.connect.card.ChangePairingPasswordCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
 
-class ChangePINActivity : AppCompatActivity() {
+class ChangePairingPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //TODO: pin validation and confirmation
+        //TODO: puk validation and confirmation
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_change_pin)
+        setContentView(R.layout.activity_change_pairing_password)
     }
 
     fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
-        val pinText = findViewById<EditText>(R.id.newPINText)
-        val script = scriptWithAuthentication().plus(ChangePINCommand(pinText.text.toString()))
+        val pairingPasswordText = findViewById<EditText>(R.id.newPairingPasswordText)
+        val script = scriptWithAuthentication().plus(ChangePairingPasswordCommand(pairingPasswordText.text.toString()))
         Registry.scriptExecutor.runScript(script)
         finish()
     }
