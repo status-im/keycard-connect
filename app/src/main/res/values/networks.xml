@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="networks">
+        <item>Ethereum Mainnet</item>
+        <item>Ropsten PoW Testnet</item>
+        <item>Rinkeby PoA Testnet</item>
+        <item>Görli PoA Testnet</item>
+        <item>Kovan PoA Testnet</item>
+    </string-array>
+</resources>

@@ -19,6 +19,9 @@ object Registry {
     lateinit var pairingManager: PairingManager
         private set
 
+    lateinit var settingsManager: SettingsManager
+        private set
+
     lateinit var mainActivity: Activity
         private set
 
@@ -54,6 +57,7 @@ object Registry {
 
         pairingManager = PairingManager(activity)
         pinCache = PINCache()
+        settingsManager = SettingsManager(activity)
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
         scriptExecutor = CardScriptExecutor(listener)
@@ -62,8 +66,7 @@ object Registry {
         cardManager.setCardListener(scriptExecutor)
         cardManager.start()
 
-        //TODO: should be configurable
-        ethereumRPC = EthereumRPC(RPC_ENDPOINT)
-        walletConnect = WalletConnect(BIP32_PATH, CHAIN_ID)
+        ethereumRPC = EthereumRPC(settingsManager.rpcEndpoint)
+        walletConnect = WalletConnect(settingsManager.bip32Path, settingsManager.chainID)
     }
 }

@@ -106,6 +106,10 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(RemoveKeyCommand()))
     }
 
+    fun settings(@Suppress("UNUSED_PARAMETER") view: View) {
+        startCommand(SettingsActivity::class)
+    }
+
     private fun loadKeyHandler(resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK || data == null) return
 

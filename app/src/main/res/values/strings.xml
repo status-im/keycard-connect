@@ -33,4 +33,8 @@
     <string name="remove_key">Remove key</string>
     <string name="change_puk_prompt">New PUK</string>
     <string name="change_pairing_password_prompt">New pairing password</string>
+    <string name="network">Network</string>
+    <string name="wallet_path_label">Wallet Path</string>
+    <string name="wallet_path_hint">m/44\'/...</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -33,6 +33,20 @@ const val REQ_LOADKEY = 0x03
 
 const val CACHE_VALIDITY = 15 * 60 * 1000
 
-const val RPC_ENDPOINT = "https://goerli.infura.io/v3/27efcb33f94e4bd0866d1aadf8e1a12d"
-const val CHAIN_ID = 5L
-const val BIP32_PATH = "m/44'/60'/0'/0"
+const val SETTINGS_CHAIN_ID = "chainID"
+const val SETTINGS_BIP32_PATH = "bip32Path"
+
+const val INFURA_API_KEY = "27efcb33f94e4bd0866d1aadf8e1a12d"
+const val RPC_ENDPOINT_TEMPLATE = "https://%s.infura.io/v3/${INFURA_API_KEY}"
+
+const val CHAIN_ID_MAINNET = 1L
+const val CHAIN_ID_ROPSTEN = 3L
+const val CHAIN_ID_RINKEBY = 4L
+const val CHAIN_ID_GOERLI = 5L
+const val CHAIN_ID_KOVAN = 42L
+
+val CHAIN_ID_TO_SHORTNAME = mapOf(CHAIN_ID_MAINNET to "mainnet", CHAIN_ID_ROPSTEN to "ropsten", CHAIN_ID_RINKEBY to "rinkeby", CHAIN_ID_GOERLI to "goerli", CHAIN_ID_KOVAN to "kovan")
+val CHAIN_IDS = listOf(CHAIN_ID_MAINNET, CHAIN_ID_ROPSTEN, CHAIN_ID_RINKEBY, CHAIN_ID_GOERLI, CHAIN_ID_KOVAN)
+
+const val DEFAULT_CHAIN_ID = CHAIN_ID_MAINNET
+const val DEFAULT_BIP32_PATH = "m/44'/60'/0'/0"
