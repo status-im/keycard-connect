@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.*
+import java.util.*
 
 class LoadKeyActivity : AppCompatActivity() {
 
@@ -33,7 +34,7 @@ class LoadKeyActivity : AppCompatActivity() {
     fun importBIP39(@Suppress("UNUSED_PARAMETER") view: View) {
         val intent = Intent()
         intent.putExtra(LOAD_TYPE, LOAD_IMPORT_BIP39)
-        intent.putExtra(LOAD_MNEMONIC, findViewById<EditText>(R.id.importMnemonicText).text.toString())
+        intent.putExtra(LOAD_MNEMONIC, findViewById<EditText>(R.id.importMnemonicText).text.toString().toLowerCase(Locale.ENGLISH).trim())
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

@@ -158,12 +158,12 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
 
         val intent = Intent(Registry.mainActivity, SignTransactionActivity::class.java).apply {
             if (tx.isTokenTransfer()) {
+                //TODO: use currency name and decimal places to show amount
                 putExtra(SIGN_TX_AMOUNT, tx.getTokenTransferValue().toString(10))
-                //TODO: Replace with short name
                 putExtra(SIGN_TX_CURRENCY, tx.to?.hex)
                 putExtra(SIGN_TX_TO, tx.getTokenTransferTo().hex)
             } else {
-                putExtra(SIGN_TX_AMOUNT, tx.value?.toString(10))
+                putExtra(SIGN_TX_AMOUNT, tx.value?.toTransferredAmount())
                 putExtra(SIGN_TX_CURRENCY, "ETH")
                 putExtra(SIGN_TX_TO, tx.to?.hex)
                 putExtra(SIGN_TX_DATA, tx.input.toNoPrefixHexString())
