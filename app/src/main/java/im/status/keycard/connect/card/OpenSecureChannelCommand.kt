@@ -7,35 +7,28 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import im.status.keycard.connect.ui.PairingActivity
+import im.status.keycard.io.APDUException
 import java.io.IOException
 
 class OpenSecureChannelCommand : CardCommand {
     private var pairingPassword: String? = null
 
     private fun openSecureChannel(cmdSet: KeycardCommandSet): CardCommand.Result {
-        try {
+        return runOnCard {
             cmdSet.autoOpenSecureChannel()
-        } catch (e: IOException) {
-            //TODO: must distinguish real IOException from card exception (to fix in SDK)
-            return CardCommand.Result.CANCEL
         }
-
-        return CardCommand.Result.OK
     }
 
     private fun pair(activity: Activity, cmdSet: KeycardCommandSet): CardCommand.Result {
         if (pairingPassword != null) {
-            try {
-                //TODO: must distinguish real IOException from card exception (to fix in SDK)
+            val res = runOnCard {
                 cmdSet.autoPair(pairingPassword)
                 Registry.pairingManager.putPairing(cmdSet.applicationInfo.instanceUID, cmdSet.pairing)
                 cmdSet.autoOpenSecureChannel()
-                return CardCommand.Result.OK
-            } catch(e: IOException) {
-                e.printStackTrace()
-            } finally {
-                pairingPassword = null
             }
+
+            pairingPassword = null
+            return res
         }
 
         return promptPairingPassword(activity)

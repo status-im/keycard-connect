@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
     implementation 'androidx.security:security-crypto:1.0.0-alpha02'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.64'
-    implementation 'com.github.status-im.status-keycard-java:android:3.0.1'
+    implementation 'com.github.status-im.status-keycard-java:android:3.0.2'
     implementation 'com.github.walletconnect:kotlin-walletconnect-lib:0.9.4'
     implementation 'com.journeyapps:zxing-android-embedded:4.0.0'
     implementation 'com.google.zxing:core:3.4.0'
