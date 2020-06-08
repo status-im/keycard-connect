@@ -106,6 +106,10 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(RemoveKeyCommand()))
     }
 
+    fun reinstall(@Suppress("UNUSED_PARAMETER") view: View) {
+        startCommand(ReinstallActivity::class)
+    }
+
     fun settings(@Suppress("UNUSED_PARAMETER") view: View) {
         startCommand(SettingsActivity::class)
     }

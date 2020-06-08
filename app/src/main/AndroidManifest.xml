@@ -29,6 +29,7 @@
         <activity android:name=".ui.InitActivity" />
         <activity android:name=".ui.PairingActivity" />
         <activity android:name=".ui.PINActivity" />
+        <activity android:name=".ui.ReinstallActivity" />
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name">

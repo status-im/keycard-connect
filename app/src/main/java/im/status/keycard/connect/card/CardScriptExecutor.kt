@@ -8,7 +8,7 @@ import im.status.keycard.io.CardChannel
 import im.status.keycard.io.CardListener
 
 class CardScriptExecutor(private val listener: ScriptListener) : CardListener {
-    data class ScriptContext(val activity: Activity, val cmdSet: KeycardCommandSet)
+    data class ScriptContext(val activity: Activity, val channel: CardChannel, val cmdSet: KeycardCommandSet)
 
     enum class State {
         READY, UX_ONGOING, RUNNING
@@ -21,7 +21,7 @@ class CardScriptExecutor(private val listener: ScriptListener) : CardListener {
     private var waitingCmd: CardCommand? = null
 
     override fun onConnected(channel: CardChannel) {
-        val executionContext = ScriptContext(Registry.mainActivity, KeycardCommandSet(channel))
+        val executionContext = ScriptContext(Registry.mainActivity, channel, KeycardCommandSet(channel))
 
         if (state == State.READY) {
             startScript()

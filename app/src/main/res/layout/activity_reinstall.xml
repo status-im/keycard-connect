@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ReinstallActivity">
+
+    <TextView
+        android:id="@+id/reinstallPrompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="@string/reinstall_applet_prompt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/reinstallWarning"
+        android:layout_width="327dp"
+        android:layout_height="127dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/reinstall_warning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reinstallPrompt" />
+
+    <CheckBox
+        android:id="@+id/reinstallWalletCheckbox"
+        android:layout_width="324dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:text="@string/reinstall_wallet_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reinstallWarning" />
+
+    <CheckBox
+        android:id="@+id/reinstallCashCheckbox"
+        android:layout_width="324dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:text="@string/reinstall_cash_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reinstallWalletCheckbox" />
+
+    <CheckBox
+        android:id="@+id/reinstallNDEFCheckbox"
+        android:layout_width="324dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:text="@string/reinstall_ndef_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reinstallCashCheckbox" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="324dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="16dp"
+        android:onClick="cancel"
+        android:text="@android:string/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reinstallNDEFCheckbox" />
+
+    <Button
+        android:id="@+id/reinstallButton"
+        android:layout_width="324dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="16dp"
+        android:onClick="reinstall"
+        android:text="@string/reinstall_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

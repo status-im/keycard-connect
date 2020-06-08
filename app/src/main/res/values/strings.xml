@@ -37,4 +37,11 @@
     <string name="wallet_path_label">Wallet Path</string>
     <string name="wallet_path_hint">m/44\'/...</string>
     <string name="settings">Settings</string>
+    <string name="reinstall">(Re)install applet</string>
+    <string name="reinstall_applet_prompt">Reinstall applet</string>
+    <string name="reinstall_warning">WARNING: Reinstalling the applet completely destroys the currently loaded keys and resets all credentials. Make sure you have your seed phrase somewhere to restore from. Additionally, JCOP3 cards can be destroyed if the connection is lost during this process. Hold the card tightly to the phone!</string>
+    <string name="reinstall_wallet_checkbox">Install Wallet applet</string>
+    <string name="reinstall_cash_checkbox">Install Cash applet</string>
+    <string name="reinstall_ndef_checkbox">Install NDEF applet</string>
+    <string name="reinstall_button">Select cap file and install</string>
 </resources>

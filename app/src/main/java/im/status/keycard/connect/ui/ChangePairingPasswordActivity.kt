@@ -11,7 +11,7 @@ import im.status.keycard.connect.card.scriptWithAuthentication
 
 class ChangePairingPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //TODO: puk validation and confirmation
+        //TODO: pairing password confirmation
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_pairing_password)
     }
