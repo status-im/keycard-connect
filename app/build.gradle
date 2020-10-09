@@ -1,16 +1,13 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
     defaultConfig {
         applicationId "im.status.keycard.connect"
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -43,37 +40,41 @@ android {
             warning 'InvalidPackage' // for bouncycastle
         }
     }
-
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment:2.1.0'
-    implementation 'androidx.navigation:navigation-ui:2.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
-    implementation 'androidx.security:security-crypto:1.0.0-alpha02'
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.64'
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    implementation 'androidx.security:security-crypto:1.1.0-alpha02'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.65'
     implementation 'com.github.status-im.status-keycard-java:android:3.0.2'
-    implementation 'com.github.walletconnect:kotlin-walletconnect-lib:0.9.4'
+    implementation 'com.github.walletconnect:kotlin-walletconnect-lib:0.9.7'
     implementation 'com.journeyapps:zxing-android-embedded:4.0.0'
-    implementation 'com.google.zxing:core:3.4.0'
-    implementation 'com.squareup.moshi:moshi:1.9.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.2.1'
-    implementation 'com.squareup.moshi:moshi-kotlin:1.9.1'
-    implementation "com.github.komputing.kethereum:extensions:$kethereum_version"
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'com.squareup.moshi:moshi:1.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.11.0'
     implementation "com.github.komputing.kethereum:model:$kethereum_version"
-    implementation "com.github.komputing.kethereum:functions:$kethereum_version"
     implementation "com.github.komputing.kethereum:rpc:$kethereum_version"
+    implementation "com.github.komputing.kethereum:extensions_transactions:$kethereum_version"
+    implementation "com.github.komputing.kethereum:extensions_kotlin:$kethereum_version"
     implementation "com.github.komputing.kethereum:keccak_shortcut:$kethereum_version"
-    implementation 'com.github.komputing:khex:0.6'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.github.komputing:khex:1.0.0'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.bouncycastle:bcprov-jdk15on:1.65'
+    }
 }

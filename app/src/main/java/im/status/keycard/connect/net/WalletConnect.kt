@@ -19,21 +19,22 @@ import okhttp3.OkHttpClient
 import org.kethereum.DEFAULT_GAS_LIMIT
 import org.kethereum.extensions.maybeHexToBigInteger
 import org.kethereum.extensions.toBigInteger
-import org.kethereum.functions.encodeRLP
-import org.kethereum.functions.getTokenTransferTo
-import org.kethereum.functions.getTokenTransferValue
-import org.kethereum.functions.isTokenTransfer
+import org.kethereum.extensions.transactions.encodeRLP
+import org.kethereum.extensions.transactions.getTokenTransferTo
+import org.kethereum.extensions.transactions.getTokenTransferValue
+import org.kethereum.extensions.transactions.isTokenTransfer
 import org.kethereum.keccakshortcut.keccak
 import org.kethereum.model.*
+import org.komputing.khex.encode
+import org.komputing.khex.extensions.hexToByteArray
+import org.komputing.khex.extensions.toHexString
+import org.komputing.khex.extensions.toNoPrefixHexString
+import org.komputing.khex.model.HexString
 import org.walletconnect.Session
 import org.walletconnect.Session.Config.Companion.fromWCUri
 import org.walletconnect.impls.*
-import org.walleth.khex.hexToByteArray
-import org.walleth.khex.toHexString
-import org.walleth.khex.toNoPrefixHexString
 import java.io.File
 import java.lang.Exception
-import java.math.BigInteger
 
 class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
 
@@ -63,6 +64,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
                 is Session.MethodCall.SignMessage -> signText(call.id, call.message)
                 is Session.MethodCall.SendTransaction -> signTransaction(call.id, toTransaction(call), true)
                 is Session.MethodCall.Custom -> onCustomCall(call)
+                else -> session?.rejectRequest(call.id(), 1L, "Not implemented")
             }
         }
     }
@@ -103,11 +105,11 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
     }
 
     private fun toTransaction(tx: Session.MethodCall.SendTransaction): Transaction {
-        val gasLimit = tx.gasLimit?.maybeHexToBigInteger() ?: DEFAULT_GAS_LIMIT
-        val gasPrice = tx.gasPrice?.maybeHexToBigInteger() ?: Registry.ethereumRPC.ethGasPrice()
-        val nonce = tx.nonce?.maybeHexToBigInteger() ?: Registry.ethereumRPC.ethGetTransactionCount(tx.from)
-
-        return Transaction(chainID.toBigInteger(), null, Address(tx.from), gasLimit, gasPrice, tx.data.hexToByteArray(), nonce, Address(tx.to), null, tx.value.maybeHexToBigInteger())
+        val gasLimit = if(tx.gasLimit != null) HexString(tx.gasLimit!!).maybeHexToBigInteger() else DEFAULT_GAS_LIMIT
+        val gasPrice = if(tx.gasPrice != null) HexString(tx.gasPrice!!).maybeHexToBigInteger() else Registry.ethereumRPC.ethGasPrice()
+        val nonce = if(tx.nonce != null) HexString(tx.nonce!!).maybeHexToBigInteger() else Registry.ethereumRPC.ethGetTransactionCount(tx.from)
+        val to = if(tx.to != null) Address(tx.to!!) else null
+        return Transaction(chainID.toBigInteger(), null, Address(tx.from), gasLimit, gasPrice, HexString(tx.data).hexToByteArray(), nonce, to, null, HexString(tx.value).maybeHexToBigInteger(),null, null)
     }
 
     private fun relayTX(id: Long, signedTx: String) {
@@ -115,7 +117,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
     }
 
     private fun signText(id: Long, message: String) {
-        val msg = message.hexToByteArray()
+        val msg = HexString(message).hexToByteArray()
         val text = String(msg)
 
         requestId = id
@@ -124,7 +126,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
             Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
-        signAction = { session?.approveRequest(requestId, "0x${it.r.toNoPrefixHexString()}${it.s.toNoPrefixHexString()}${(it.recId + 27).toByte().toHexString()}") }
+        signAction = { session?.approveRequest(requestId, "0x${it.r.toNoPrefixHexString()}${it.s.toNoPrefixHexString()}${encode((it.recId + 27).toByte())}") }
 
         val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
             putExtra(SIGN_TEXT_MESSAGE, text)
@@ -198,7 +200,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
             session?.kill()
 
             session = WCSession(
-                fromWCUri(uri),
+                fromWCUri(uri).toFullyQualifiedConfig(),
                 MoshiPayloadAdapter(moshi),
                 sessionStore,
                 OkHttpTransport.Builder(okHttpClient, moshi),
