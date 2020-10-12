@@ -43,7 +43,6 @@ import pm.gnosis.eip712.EIP712JsonParser
 import pm.gnosis.eip712.adapters.moshi.MoshiAdapter
 import pm.gnosis.eip712.typedDataHash
 import java.io.File
-import kotlin.reflect.typeOf
 
 class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
 
