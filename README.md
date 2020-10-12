@@ -14,6 +14,7 @@ At the moment all dApps tested worked fine. The implemented functions are:
 * eth_sendRawTransaction
 * eth_signTransaction
 * eth_sign
+* eth_signTypedData
 * personal_sign
 
 ### Seed management
@@ -36,7 +37,6 @@ At the moment all dApps tested worked fine. The implemented functions are:
 * allow switching account (BIP32 path) on card and used network (for WalletConnect)
 
 ## What needs to be done for 1.0
-* implement signedTypedData (WalletConnect integration)
 * design and implement a user-friendly UI
 
 ## Future plans (after 1.0)
