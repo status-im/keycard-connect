@@ -1,11 +1,11 @@
 package im.status.keycard.connect.ui
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 

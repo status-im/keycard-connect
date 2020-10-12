@@ -3,7 +3,10 @@ package im.status.keycard.connect.card
 import android.app.Activity
 import android.content.Intent
 import im.status.keycard.connect.Registry
-import im.status.keycard.connect.data.*
+import im.status.keycard.connect.data.PIN_ACTIVITY_ATTEMPTS
+import im.status.keycard.connect.data.PIN_ACTIVITY_CARD_UID
+import im.status.keycard.connect.data.PUK_ACTIVITY_ATTEMPTS
+import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import im.status.keycard.connect.ui.PINActivity
 import im.status.keycard.connect.ui.PUKActivity
 import im.status.keycard.io.APDUException

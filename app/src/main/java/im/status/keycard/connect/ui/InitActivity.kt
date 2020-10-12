@@ -2,18 +2,18 @@ package im.status.keycard.connect.ui
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
-import android.view.View
-import im.status.keycard.globalplatform.Crypto
 import android.util.Base64.NO_PADDING
 import android.util.Base64.NO_WRAP
+import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.INIT_ACTIVITY_PAIRING
 import im.status.keycard.connect.data.INIT_ACTIVITY_PIN
 import im.status.keycard.connect.data.INIT_ACTIVITY_PUK
+import im.status.keycard.globalplatform.Crypto
 
 class InitActivity : AppCompatActivity() {
     private lateinit var pin: String

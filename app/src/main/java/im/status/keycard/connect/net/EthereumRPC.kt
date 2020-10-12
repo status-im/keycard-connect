@@ -6,7 +6,6 @@ import com.squareup.moshi.Types
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.kethereum.rpc.HttpEthereumRPC
-import java.lang.Exception
 import java.lang.reflect.Type
 import java.math.BigInteger
 

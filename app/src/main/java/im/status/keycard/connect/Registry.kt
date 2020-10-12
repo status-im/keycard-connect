@@ -6,8 +6,11 @@ import android.nfc.NfcAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.status.keycard.android.NFCCardManager
-import im.status.keycard.connect.card.*
-import im.status.keycard.connect.data.*
+import im.status.keycard.connect.card.CardScriptExecutor
+import im.status.keycard.connect.card.ScriptListener
+import im.status.keycard.connect.data.PINCache
+import im.status.keycard.connect.data.PairingManager
+import im.status.keycard.connect.data.SettingsManager
 import im.status.keycard.connect.net.EthereumRPC
 import im.status.keycard.connect.net.WalletConnect
 

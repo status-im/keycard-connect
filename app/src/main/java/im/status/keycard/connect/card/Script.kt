@@ -1,7 +1,6 @@
 package im.status.keycard.connect.card
 
 import java.io.IOException
-import java.lang.Exception
 
 fun scriptWithSecureChannel(): List<CardCommand> = listOf(SelectCommand(), InitCommand(), OpenSecureChannelCommand())
 fun scriptWithAuthentication(): List<CardCommand> = scriptWithSecureChannel().plus(VerifyPINCommand())
