@@ -68,6 +68,8 @@ dependencies {
     implementation "com.github.komputing.kethereum:extensions_kotlin:$kethereum_version"
     implementation "com.github.komputing.kethereum:keccak_shortcut:$kethereum_version"
     implementation 'com.github.komputing:khex:1.0.0'
+    implementation 'com.github.gnosis.svalinn-kotlin:eip712-adapter-moshi:v0.13.0'
+    implementation 'com.github.gnosis.svalinn-kotlin:eip712:v0.13.0'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

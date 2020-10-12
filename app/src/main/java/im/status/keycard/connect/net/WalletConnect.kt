@@ -39,7 +39,11 @@ import org.walletconnect.impls.FileWCSessionStore
 import org.walletconnect.impls.MoshiPayloadAdapter
 import org.walletconnect.impls.OkHttpTransport
 import org.walletconnect.impls.WCSession
+import pm.gnosis.eip712.EIP712JsonParser
+import pm.gnosis.eip712.adapters.moshi.MoshiAdapter
+import pm.gnosis.eip712.typedDataHash
 import java.io.File
+import kotlin.reflect.typeOf
 
 class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
 
@@ -91,7 +95,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
     private fun onCustomCall(call: Session.MethodCall.Custom) {
         when(call.method) {
             "personal_sign" -> runOnValidParam<String>(call, 0) { signText(call.id, it) }
-            "eth_signTypedData" -> { runOnValidParam<Map<*, *>>(call, 1) { @Suppress("UNCHECKED_CAST") signTypedData(call.id, it as Map<String, String>) } }
+            "eth_signTypedData" -> { runOnValidParam<String>(call, 1) { @Suppress("UNCHECKED_CAST") signTypedData(call.id, it) } }
             "eth_signTransaction" -> { runOnValidParam<Map<*, *>>(call, 0) { signTransaction(call.id, toTransaction(toSendTransaction(call.id, it)), false)} }
             "eth_sendRawTransaction" -> { runOnValidParam<String>(call, 0) { relayTX(call.id, it) } }
             else -> session?.rejectRequest(call.id, 1L, "Not implemented")
@@ -140,9 +144,21 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
         Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
     }
 
-    private fun signTypedData(id: Long, message: Map<String, String>) {
+    private fun signTypedData(id: Long, message: String) {
         requestId = id
-        session?.rejectRequest(id, 1L, "Not implemented yet")
+        uiAction = {
+            val domainWithMessage = EIP712JsonParser(MoshiAdapter()).parseMessage(message)
+            val hash = typedDataHash(domainWithMessage.message, domainWithMessage.domain)
+            Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
+        }
+
+        signAction = { session?.approveRequest(requestId, "0x${it.r.toNoPrefixHexString()}${it.s.toNoPrefixHexString()}${encode((it.recId + 27).toByte())}") }
+
+        val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
+            putExtra(SIGN_TEXT_MESSAGE, message)
+        }
+
+        Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
     }
 
     private fun signTransaction(id: Long, tx: Transaction, send: Boolean) {
