@@ -1,20 +1,20 @@
 package im.status.keycard.connect.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.nfc.NfcAdapter
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ViewSwitcher
+import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
-import kotlin.reflect.KClass
-import com.google.zxing.client.android.Intents
 import im.status.keycard.connect.data.*
+import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), ScriptListener {
     private lateinit var viewSwitcher: ViewSwitcher

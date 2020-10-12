@@ -7,8 +7,6 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import im.status.keycard.connect.ui.PairingActivity
-import im.status.keycard.io.APDUException
-import java.io.IOException
 
 class OpenSecureChannelCommand : CardCommand {
     private var pairingPassword: String? = null

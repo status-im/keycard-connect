@@ -3,7 +3,6 @@ package im.status.keycard.connect.data
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
 
 class PINCache {
     //TODO: don't use Strings, the memory should be cleared before release. For this the entire

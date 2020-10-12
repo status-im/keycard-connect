@@ -5,9 +5,9 @@ import android.content.SharedPreferences
 import android.util.Base64
 import android.util.Base64.NO_PADDING
 import android.util.Base64.NO_WRAP
-import im.status.keycard.applet.Pairing
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
+import im.status.keycard.applet.Pairing
 
 class PairingManager(context: Context) {
     private val sharedPreferences: SharedPreferences
@@ -17,8 +17,8 @@ class PairingManager(context: Context) {
     }
 
     init {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-        sharedPreferences = EncryptedSharedPreferences.create("pairings", masterKeyAlias, context, EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
+        val masterKey = MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+        sharedPreferences = EncryptedSharedPreferences.create(context,"pairings", masterKey, EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
     }
 
     fun getPairing(instanceUID: ByteArray): Pairing? {

@@ -24,7 +24,10 @@ import org.kethereum.extensions.transactions.getTokenTransferTo
 import org.kethereum.extensions.transactions.getTokenTransferValue
 import org.kethereum.extensions.transactions.isTokenTransfer
 import org.kethereum.keccakshortcut.keccak
-import org.kethereum.model.*
+import org.kethereum.model.Address
+import org.kethereum.model.SignatureData
+import org.kethereum.model.SignedTransaction
+import org.kethereum.model.Transaction
 import org.komputing.khex.encode
 import org.komputing.khex.extensions.hexToByteArray
 import org.komputing.khex.extensions.toHexString
@@ -32,9 +35,11 @@ import org.komputing.khex.extensions.toNoPrefixHexString
 import org.komputing.khex.model.HexString
 import org.walletconnect.Session
 import org.walletconnect.Session.Config.Companion.fromWCUri
-import org.walletconnect.impls.*
+import org.walletconnect.impls.FileWCSessionStore
+import org.walletconnect.impls.MoshiPayloadAdapter
+import org.walletconnect.impls.OkHttpTransport
+import org.walletconnect.impls.WCSession
 import java.io.File
-import java.lang.Exception
 
 class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
 
