@@ -2,18 +2,25 @@ package im.status.keycard.connect.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.ChangePUKCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
+import im.status.keycard.connect.data.isValidPUK
 
 class ChangePUKActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //TODO: puk validation and confirmation
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_puk)
+
+        val pukText = findViewById<EditText>(R.id.newPUKText)
+        val pukConfirmation = findViewById<EditText>(R.id.pukConfirmation)
+        pukText.doAfterTextChanged { validatePUK() }
+        pukConfirmation.doAfterTextChanged { validatePUK() }
     }
 
     fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -25,5 +32,12 @@ class ChangePUKActivity : AppCompatActivity() {
 
     fun cancel(@Suppress("UNUSED_PARAMETER") view: View) {
         finish()
+    }
+
+    private fun validatePUK() {
+        val pukText = findViewById<EditText>(R.id.newPUKText).text.toString()
+        val pukConfirmation = findViewById<EditText>(R.id.pukConfirmation).text.toString()
+        val button = findViewById<Button>(R.id.okButton)
+        button.isEnabled = (pukText == pukConfirmation) && isValidPUK(pukText)
     }
 }

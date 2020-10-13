@@ -18,7 +18,7 @@ class EthereumRPC(endpointURL: String) {
     init {
         val moshi = Moshi.Builder().build()
         val type: Type = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
-        ethplorerJSONAdapter = moshi.adapter<Map<String, Any>>(type)
+        ethplorerJSONAdapter = moshi.adapter(type)
     }
 
     fun changeEndpoint(endpointURL: String) {

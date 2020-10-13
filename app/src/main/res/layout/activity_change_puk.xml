@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="88dp"
+        android:enabled="false"
         android:onClick="ok"
         android:text="@android:string/ok"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,12 +32,13 @@
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="84dp"
         android:onClick="cancel"
         android:text="@android:string/cancel"
+        app:layout_constraintEnd_toStartOf="@+id/okButton"
+        app:layout_constraintHorizontal_bias="0.557"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newPUKText" />
+        app:layout_constraintTop_toBottomOf="@+id/pukConfirmation" />
 
     <EditText
         android:id="@+id/newPUKText"
@@ -48,5 +50,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newPukPrompt"
-        tools:text="123456" />
+        tools:text="123456123456" />
+
+    <EditText
+        android:id="@+id/pukConfirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:inputType="numberPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newPUKText"
+        tools:text="123456123456" />
 </androidx.constraintlayout.widget.ConstraintLayout>
