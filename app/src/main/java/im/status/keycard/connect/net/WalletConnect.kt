@@ -43,16 +43,17 @@ import pm.gnosis.eip712.adapters.moshi.MoshiAdapter
 import pm.gnosis.eip712.typedDataHash
 import java.io.File
 
-class WalletConnect(var sessionStatusListener : Session.Callback, var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
+class WalletConnect(private val sessionStatusListener : Session.Callback, private var bip32Path: String, private var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
     private val scope = MainScope()
     private val moshi = Moshi.Builder().build()
     private val okHttpClient = OkHttpClient()
     private val sessionStore = FileWCSessionStore(File(Registry.mainActivity.filesDir, "wcSessions.json").apply { createNewFile() }, moshi)
     private var session: WCSession? = null
     private var requestId: Long = 0
-    private var currentAccount: String? = null
     private var uiAction: (Intent?) -> Unit = this::nop
     private var signAction: (RecoverableSignature) -> Unit = this::nop
+    var currentAccount: String? = null
+        private set
 
     override fun onStatus(status: Session.Status) {
         if (status == Session.Status.Closed) {
@@ -64,13 +65,17 @@ class WalletConnect(var sessionStatusListener : Session.Callback, var bip32Path:
     override fun onMethodCall(call: Session.MethodCall) {
         scope.launch(Dispatchers.IO) {
             when (call) {
-                is Session.MethodCall.SessionRequest -> Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(ExportKeyCommand(Registry.walletConnect, bip32Path)))
+                is Session.MethodCall.SessionRequest -> getAccountKeys()
                 is Session.MethodCall.SignMessage -> signText(call.id, call.message)
                 is Session.MethodCall.SendTransaction -> signTransaction(call.id, toTransaction(call), true)
                 is Session.MethodCall.Custom -> onCustomCall(call)
                 else -> session?.rejectRequest(call.id(), 1L, "Not implemented")
             }
         }
+    }
+
+    private fun getAccountKeys() {
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(ExportKeyCommand(Registry.walletConnect, bip32Path)))
     }
 
     private inline fun <reified T> runOnValidParam(call: Session.MethodCall.Custom, index: Int, body: (T) -> Unit) {
@@ -235,10 +240,31 @@ class WalletConnect(var sessionStatusListener : Session.Callback, var bip32Path:
         session?.kill()
     }
 
+    fun updateChainAndDerivation(newBip32Path: String, newChainID: Long) {
+        if (newBip32Path == bip32Path) {
+            if (newChainID != chainID) {
+                this.chainID = newChainID
+                if (session != null && currentAccount != null) {
+                    session?.update(listOf(currentAccount!!), this.chainID)
+                }
+            }
+        } else {
+            this.bip32Path = newBip32Path
+            this.chainID = newChainID
+            if (session != null && currentAccount != null) {
+                getAccountKeys()
+            }
+        }
+    }
+
     override fun onResponse(keyPair: BIP32KeyPair) {
         scope.launch(Dispatchers.IO) {
             currentAccount = keyPair.toEthereumAddress().toHexString()
-            session?.approve(listOf(currentAccount!!), chainID)
+            if (session?.approvedAccounts() != null) {
+                session?.update(listOf(currentAccount!!), chainID)
+            } else {
+                session?.approve(listOf(currentAccount!!), chainID)
+            }
         }
     }
 

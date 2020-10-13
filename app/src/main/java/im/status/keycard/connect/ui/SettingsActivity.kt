@@ -34,12 +34,11 @@ class SettingsActivity : AppCompatActivity() {
         val chainID = CHAIN_IDS[networkSpinner.selectedItemPosition]
         Registry.settingsManager.chainID = chainID
         Registry.ethereumRPC.changeEndpoint(Registry.settingsManager.rpcEndpoint)
-        Registry.walletConnect.chainID = chainID
 
         val bip32Path = walletPath.text.toString()
         Registry.settingsManager.bip32Path = bip32Path
-        Registry.walletConnect.bip32Path = bip32Path
 
+        Registry.walletConnect.updateChainAndDerivation(bip32Path, chainID)
         finish()
     }
 

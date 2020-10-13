@@ -6,8 +6,7 @@ import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.ViewSwitcher
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
@@ -34,6 +33,22 @@ class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
         Registry.init(this, this, this)
         Registry.scriptExecutor.defaultScript = cardCheckupScript()
 
+        val networkSpinner = findViewById<Spinner>(R.id.networkSpinner)
+        ArrayAdapter.createFromResource(this, R.array.networks, android.R.layout.simple_spinner_item).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            networkSpinner.adapter = it
+        }
+        networkSpinner.setSelection(CHAIN_IDS.indexOf(Registry.settingsManager.chainID))
+        networkSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val chainID = CHAIN_IDS[position]
+                Registry.settingsManager.chainID = chainID
+                Registry.ethereumRPC.changeEndpoint(Registry.settingsManager.rpcEndpoint)
+                Registry.walletConnect.updateChainAndDerivation(Registry.settingsManager.bip32Path, chainID)
+            }
+        }
+
         handleIntent(intent)
     }
 
@@ -59,7 +74,11 @@ class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
     }
 
     override fun onBackPressed() {
-        moveTaskToBack(false)
+        if (viewSwitcher.displayedChild == 0) {
+            moveTaskToBack(false)
+        } else {
+            Registry.scriptExecutor.cancelScript()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -179,11 +198,13 @@ class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
         val button = findViewById<Button>(R.id.walletConnectButton)
         button.setOnClickListener(this::disconnectWallet)
         button.text = getString(R.string.disconnect_wallet)
+        findViewById<TextView>(R.id.walletAddress).text = Registry.walletConnect.currentAccount
     }
 
     private fun walletConnectDisconnected() {
         val button = findViewById<Button>(R.id.walletConnectButton)
         button.setOnClickListener(this::connectWallet)
         button.text = getString(R.string.connect_wallet)
+        findViewById<TextView>(R.id.walletAddress).text = ""
     }
 }
