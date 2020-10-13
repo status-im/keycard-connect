@@ -45,4 +45,6 @@
     <string name="reinstall_ndef_checkbox">Install NDEF applet</string>
     <string name="reinstall_button">Select cap file and install</string>
     <string name="btn_change">Change</string>
+    <string name="disconnect_wallet">Disconnect</string>
+    <string name="update_connection">Update</string>
 </resources>

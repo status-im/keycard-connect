@@ -6,7 +6,7 @@ import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ViewSwitcher
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
@@ -14,10 +14,14 @@ import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.*
+import im.status.keycard.connect.net.WalletConnectListener
+import org.walletconnect.Session.Config.Companion.fromWCUri
 import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity(), ScriptListener {
+class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener {
     private lateinit var viewSwitcher: ViewSwitcher
+    private lateinit var networkSpinner: Spinner
+    private lateinit var walletPath: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +32,20 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         inflater.inflate(R.layout.activity_nfc, viewSwitcher)
 
         setContentView(viewSwitcher)
-        Registry.init(this, this)
+        Registry.init(this, this, this)
         Registry.scriptExecutor.defaultScript = cardCheckupScript()
+
+        networkSpinner = findViewById(R.id.networkSpinner)
+        walletPath = findViewById(R.id.walletPathText)
+
+        ArrayAdapter.createFromResource(this, R.array.networks, android.R.layout.simple_spinner_item).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            networkSpinner.adapter = it
+        }
+        networkSpinner.setSelection(CHAIN_IDS.indexOf(Registry.settingsManager.chainID))
+        walletPath.setText(Registry.settingsManager.bip32Path)
+
+        handleIntent(intent)
     }
 
     override fun onResume() {
@@ -40,6 +56,25 @@ class MainActivity : AppCompatActivity(), ScriptListener {
     override fun onPause() {
         super.onPause()
         Registry.nfcAdapter.disableReaderMode(this)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_VIEW) {
+            handleWCURI(intent.data?.toString())
+        }
+    }
+
+    override fun onBackPressed() {
+        if (viewSwitcher.displayedChild == 0) {
+            moveTaskToBack(false)
+        } else {
+            Registry.scriptExecutor.cancelScript()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -66,6 +101,17 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         }
     }
 
+    fun updateConnection(@Suppress("UNUSED_PARAMETER") view: View) {
+        val chainID = CHAIN_IDS[networkSpinner.selectedItemPosition]
+        Registry.settingsManager.chainID = chainID
+        Registry.ethereumRPC.changeEndpoint(Registry.settingsManager.rpcEndpoint)
+
+        val bip32Path = walletPath.text.toString()
+        Registry.settingsManager.bip32Path = bip32Path
+
+        Registry.walletConnect.updateChainAndDerivation(bip32Path, chainID)
+    }
+
     fun cancelNFC(@Suppress("UNUSED_PARAMETER") view: View) {
         Registry.scriptExecutor.cancelScript()
     }
@@ -75,6 +121,10 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
         integrator.setOrientationLocked(false)
         integrator.initiateScan()
+    }
+
+    fun disconnectWallet(@Suppress("UNUSED_PARAMETER") view: View) {
+        Registry.walletConnect.disconnect()
     }
 
     fun changePIN(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -110,10 +160,6 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         startCommand(ReinstallActivity::class)
     }
 
-    fun settings(@Suppress("UNUSED_PARAMETER") view: View) {
-        startCommand(SettingsActivity::class)
-    }
-
     private fun loadKeyHandler(resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK || data == null) return
 
@@ -131,10 +177,31 @@ class MainActivity : AppCompatActivity(), ScriptListener {
     private fun qrCodeScanned(resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK || data == null) return
 
-        val uri: String? = data.getStringExtra(Intents.Scan.RESULT)
+        handleWCURI(data.getStringExtra(Intents.Scan.RESULT))
 
-        if (uri != null && uri.startsWith("wc:")) {
-            Registry.walletConnect.connect(uri)
+    }
+
+    private fun handleWCURI(uri: String?) {
+        if (uri != null) {
+            try {
+                Registry.walletConnect.connect(fromWCUri(uri).toFullyQualifiedConfig())
+            } catch (e: Exception) {}
         }
+    }
+
+    override fun onConnected() {
+        val button = findViewById<Button>(R.id.walletConnectButton)
+        button.setOnClickListener(this::disconnectWallet)
+        button.text = getString(R.string.disconnect_wallet)
+    }
+
+    override fun onDisconnected() {
+        val button = findViewById<Button>(R.id.walletConnectButton)
+        button.setOnClickListener(this::connectWallet)
+        button.text = getString(R.string.connect_wallet)
+    }
+
+    override fun onAccountChanged(account: String?) {
+        findViewById<TextView>(R.id.walletAddress).text = account
     }
 }

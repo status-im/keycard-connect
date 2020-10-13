@@ -48,6 +48,11 @@ class InitActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+    }
+
     private fun randomToken(length: Int): String {
         return Base64.encodeToString(Crypto.randomBytes(length), NO_PADDING or NO_WRAP)
     }
