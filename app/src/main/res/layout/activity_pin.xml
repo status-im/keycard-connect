@@ -4,60 +4,116 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ui.PINActivity">
 
     <EditText
         android:id="@+id/pinText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_width="328dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#4360df"
         android:ems="10"
+        android:fontFamily="@font/quattrocento_sans"
         android:inputType="numberPassword"
+        android:paddingStart="55dp"
+        android:paddingEnd="20dp"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pinPrompt" />
 
     <Button
+        android:id="@+id/okButton"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button"
+        android:enabled="false"
+        android:fontFamily="@font/quattrocento_sans"
+        android:onClick="ok"
+        android:text="@string/zxing_button_ok"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cancelButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/attemptLabel" />
+
+    <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="81dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="50dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="cancel"
         android:text="@android:string/cancel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pinText" />
-
-    <Button
-        android:id="@+id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="81dp"
-        android:layout_marginEnd="57dp"
-        android:enabled="false"
-        android:onClick="ok"
-        android:text="@android:string/ok"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pinText" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/okButton" />
 
     <TextView
         android:id="@+id/pinPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="25dp"
+        android:fontFamily="@font/roboto_bold"
         android:text="@string/pin_prompt"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/pinText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/pinImageView" />
 
     <TextView
         android:id="@+id/attemptLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/pin_attempts"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pinText" />
+
+    <ImageView
+        android:id="@+id/pinImageView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/keycard_image"
+        app:layout_constraintBottom_toTopOf="@+id/pinPrompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_keycard" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="18sp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
+        android:contentDescription="@string/pass_image"
+        app:layout_constraintBottom_toBottomOf="@+id/pinText"
+        app:layout_constraintStart_toStartOf="@+id/pinText"
+        app:layout_constraintTop_toTopOf="@+id/pinText"
+        app:srcCompat="@drawable/ic_password" />
 </androidx.constraintlayout.widget.ConstraintLayout>

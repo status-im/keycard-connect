@@ -20,10 +20,10 @@
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/newPUKText"
+        app:layout_constraintBottom_toTopOf="@+id/passwordText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pukImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/passImageView" />
 
     <EditText
         android:id="@+id/passwordText"
@@ -31,10 +31,12 @@
         android:layout_height="46dp"
         android:layout_marginTop="40dp"
         android:backgroundTint="#4360df"
+        android:contentDescription="@string/pass_image"
         android:ems="10"
         android:fontFamily="@font/quattrocento_sans"
         android:inputType="textPassword"
         android:paddingStart="55dp"
+        android:paddingEnd="20dp"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +52,7 @@
         android:enabled="false"
         android:fontFamily="@font/quattrocento_sans"
         android:onClick="ok"
-        android:text="@string/btn_change"
+        android:text="@string/zxing_button_ok"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
@@ -77,13 +79,14 @@
         app:layout_constraintTop_toBottomOf="@+id/okButton" />
 
     <ImageView
-        android:id="@+id/pukImageView"
+        android:id="@+id/passImageView"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="190dp"
         android:layout_marginTop="90dp"
         android:layout_marginEnd="190dp"
         android:layout_marginBottom="20dp"
+        android:contentDescription="@string/keycard_image"
         app:layout_constraintBottom_toTopOf="@+id/passwordPrompt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,6 +99,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="5dp"
+        android:contentDescription="@string/pass_image"
         app:layout_constraintBottom_toBottomOf="@+id/passwordText"
         app:layout_constraintStart_toStartOf="@+id/passwordText"
         app:layout_constraintTop_toTopOf="@+id/passwordText"
