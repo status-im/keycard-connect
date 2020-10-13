@@ -16,8 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".ui.SettingsActivity" />
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".ui.ChangePairingPasswordActivity" />
         <activity android:name=".ui.ChangePUKActivity" />
         <activity android:name=".ui.ShowMnemonicActivity" />

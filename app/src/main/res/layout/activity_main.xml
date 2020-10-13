@@ -11,24 +11,11 @@
         android:id="@+id/walletConnectButton"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="188dp"
         android:onClick="connectWallet"
         android:text="@string/connect_wallet"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/changePINButton"
-        android:layout_width="131dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="228dp"
-        android:onClick="changePIN"
-        android:text="@string/change_pin"
-        app:layout_constraintEnd_toStartOf="@+id/changePUKButton"
-        app:layout_constraintHorizontal_bias="0.104"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,18 +68,6 @@
         app:layout_constraintTop_toBottomOf="@+id/changePairingPasswordButton" />
 
     <Button
-        android:id="@+id/settingsButton"
-        android:layout_width="236dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="settings"
-        android:text="@string/settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reinstall" />
-
-    <Button
         android:id="@+id/removeKey"
         android:layout_width="236dp"
         android:layout_height="wrap_content"
@@ -120,11 +95,24 @@
         android:id="@+id/changePUKButton"
         android:layout_width="149dp"
         android:layout_height="46dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="48dp"
-        android:onClick="changePUK"
+        android:layout_marginTop="296dp"
+        android:layout_marginEnd="60dp"
+        android:onClick="updateConnection"
         android:text="@string/change_puk"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/changePINButton"
+        android:layout_width="131dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="296dp"
+        android:onClick="updateConnection"
+        android:text="@string/change_pin"
+        app:layout_constraintEnd_toStartOf="@+id/changePUKButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
@@ -141,7 +129,29 @@
         android:layout_width="375dp"
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/networkSpinner" />
+
+    <EditText
+        android:id="@+id/walletPathText"
+        android:layout_width="249dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/networkSpinner" />
+
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="32dp"
+        android:onClick="updateConnection"
+        android:text="@string/update_connection"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/networkSpinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

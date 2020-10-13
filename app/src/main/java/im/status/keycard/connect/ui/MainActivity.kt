@@ -15,12 +15,13 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.*
 import im.status.keycard.connect.net.WalletConnectListener
-import org.walletconnect.Session
 import org.walletconnect.Session.Config.Companion.fromWCUri
 import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener {
     private lateinit var viewSwitcher: ViewSwitcher
+    private lateinit var networkSpinner: Spinner
+    private lateinit var walletPath: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,21 +35,15 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         Registry.init(this, this, this)
         Registry.scriptExecutor.defaultScript = cardCheckupScript()
 
-        val networkSpinner = findViewById<Spinner>(R.id.networkSpinner)
+        networkSpinner = findViewById(R.id.networkSpinner)
+        walletPath = findViewById(R.id.walletPathText)
+
         ArrayAdapter.createFromResource(this, R.array.networks, android.R.layout.simple_spinner_item).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             networkSpinner.adapter = it
         }
         networkSpinner.setSelection(CHAIN_IDS.indexOf(Registry.settingsManager.chainID))
-        networkSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val chainID = CHAIN_IDS[position]
-                Registry.settingsManager.chainID = chainID
-                Registry.ethereumRPC.changeEndpoint(Registry.settingsManager.rpcEndpoint)
-                Registry.walletConnect.updateChainAndDerivation(Registry.settingsManager.bip32Path, chainID)
-            }
-        }
+        walletPath.setText(Registry.settingsManager.bip32Path)
 
         handleIntent(intent)
     }
@@ -106,6 +101,17 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         }
     }
 
+    fun updateConnection(view: View) {
+        val chainID = CHAIN_IDS[networkSpinner.selectedItemPosition]
+        Registry.settingsManager.chainID = chainID
+        Registry.ethereumRPC.changeEndpoint(Registry.settingsManager.rpcEndpoint)
+
+        val bip32Path = walletPath.text.toString()
+        Registry.settingsManager.bip32Path = bip32Path
+
+        Registry.walletConnect.updateChainAndDerivation(bip32Path, chainID)
+    }
+
     fun cancelNFC(@Suppress("UNUSED_PARAMETER") view: View) {
         Registry.scriptExecutor.cancelScript()
     }
@@ -152,10 +158,6 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
 
     fun reinstall(@Suppress("UNUSED_PARAMETER") view: View) {
         startCommand(ReinstallActivity::class)
-    }
-
-    fun settings(@Suppress("UNUSED_PARAMETER") view: View) {
-        startCommand(SettingsActivity::class)
     }
 
     private fun loadKeyHandler(resultCode: Int, data: Intent?) {
