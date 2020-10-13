@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         }
     }
 
-    fun updateConnection(view: View) {
+    fun updateConnection(@Suppress("UNUSED_PARAMETER") view: View) {
         val chainID = CHAIN_IDS[networkSpinner.selectedItemPosition]
         Registry.settingsManager.chainID = chainID
         Registry.ethereumRPC.changeEndpoint(Registry.settingsManager.rpcEndpoint)
