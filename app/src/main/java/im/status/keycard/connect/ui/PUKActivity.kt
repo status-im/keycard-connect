@@ -3,19 +3,20 @@ package im.status.keycard.connect.ui
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.data.PUK_ACTIVITY_ATTEMPTS
+import im.status.keycard.connect.data.isValidPIN
+import im.status.keycard.connect.data.isValidPUK
 
 class PUKActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //TODO: validate PUK length == 12
-        //TODO: validate PIN length == 6
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_puk)
         val attempts = intent.getIntExtra(PUK_ACTIVITY_ATTEMPTS, -1)
@@ -27,6 +28,10 @@ class PUKActivity : AppCompatActivity() {
         } else {
             attemptLabel.text = getString(R.string.pin_attempts, attempts)
         }
+
+        findViewById<EditText>(R.id.pukText).doAfterTextChanged { validateFields() }
+        findViewById<EditText>(R.id.newPINText).doAfterTextChanged { validateFields() }
+        findViewById<EditText>(R.id.pinConfirmation).doAfterTextChanged { validateFields() }
     }
 
     fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -42,4 +47,13 @@ class PUKActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED)
         finish()
     }
+
+    private fun validateFields() {
+        val pukText = findViewById<EditText>(R.id.pukText).text.toString()
+        val pinText = findViewById<EditText>(R.id.newPINText).text.toString()
+        val pinConfirmationText = findViewById<EditText>(R.id.pinConfirmation).text.toString()
+        val button = findViewById<Button>(R.id.okButton)
+        button.isEnabled = (pinText == pinConfirmationText) && isValidPIN(pinText) && isValidPUK(pukText)
+    }
+
 }

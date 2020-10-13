@@ -3,20 +3,21 @@ package im.status.keycard.connect.ui
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.data.PIN_ACTIVITY_ATTEMPTS
 import im.status.keycard.connect.data.PIN_ACTIVITY_CARD_UID
+import im.status.keycard.connect.data.isValidPIN
 
 class PINActivity : AppCompatActivity() {
     private lateinit var cardUID: ByteArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //TODO: validate PIN length == 6
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
         val attempts = intent.getIntExtra(PIN_ACTIVITY_ATTEMPTS, -1)
@@ -29,6 +30,9 @@ class PINActivity : AppCompatActivity() {
         } else {
             attemptLabel.text = getString(R.string.pin_attempts, attempts)
         }
+
+        val pinText = findViewById<EditText>(R.id.pinText)
+        pinText.doAfterTextChanged { findViewById<Button>(R.id.okButton).isEnabled = isValidPIN(pinText.text.toString()) }
     }
 
     fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
