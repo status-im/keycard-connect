@@ -34,7 +34,6 @@ import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.extensions.toNoPrefixHexString
 import org.komputing.khex.model.HexString
 import org.walletconnect.Session
-import org.walletconnect.Session.Config.Companion.fromWCUri
 import org.walletconnect.impls.FileWCSessionStore
 import org.walletconnect.impls.MoshiPayloadAdapter
 import org.walletconnect.impls.OkHttpTransport
@@ -212,12 +211,12 @@ class WalletConnect(var sessionStatusListener : Session.Callback, var bip32Path:
         uiAction = this::nop
     }
 
-    fun connect(uri: String) {
+    fun connect(uri: Session.FullyQualifiedConfig) {
         scope.launch(Dispatchers.IO) {
             session?.kill()
 
             session = WCSession(
-                fromWCUri(uri).toFullyQualifiedConfig(),
+                uri,
                 MoshiPayloadAdapter(moshi),
                 sessionStore,
                 OkHttpTransport.Builder(okHttpClient, moshi),

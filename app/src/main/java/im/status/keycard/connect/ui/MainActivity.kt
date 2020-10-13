@@ -16,6 +16,7 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.*
 import org.walletconnect.Session
+import org.walletconnect.Session.Config.Companion.fromWCUri
 import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
         setContentView(viewSwitcher)
         Registry.init(this, this, this)
         Registry.scriptExecutor.defaultScript = cardCheckupScript()
+
+        handleIntent(intent)
     }
 
     override fun onResume() {
@@ -42,6 +45,21 @@ class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
     override fun onPause() {
         super.onPause()
         Registry.nfcAdapter.disableReaderMode(this)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent?.action == Intent.ACTION_VIEW) {
+            handleWCURI(intent.data?.toString())
+        }
+    }
+
+    override fun onBackPressed() {
+        moveTaskToBack(false)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -137,10 +155,15 @@ class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
     private fun qrCodeScanned(resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK || data == null) return
 
-        val uri: String? = data.getStringExtra(Intents.Scan.RESULT)
+        handleWCURI(data.getStringExtra(Intents.Scan.RESULT))
 
-        if (uri != null && uri.startsWith("wc:")) {
-            Registry.walletConnect.connect(uri)
+    }
+
+    private fun handleWCURI(uri: String?) {
+        if (uri != null) {
+            try {
+                Registry.walletConnect.connect(fromWCUri(uri).toFullyQualifiedConfig())
+            } catch (e: Exception) {}
         }
     }
 
