@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 
@@ -14,6 +16,8 @@ class PairingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pairing)
+        val passText = findViewById<EditText>(R.id.passwordText)
+        passText.doAfterTextChanged { findViewById<Button>(R.id.okButton).isEnabled = passText.text.toString().isNotEmpty() }
     }
 
     fun ok(@Suppress("UNUSED_PARAMETER") view: View) {
