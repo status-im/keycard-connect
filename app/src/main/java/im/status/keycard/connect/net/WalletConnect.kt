@@ -34,7 +34,6 @@ import org.komputing.khex.extensions.toHexString
 import org.komputing.khex.extensions.toNoPrefixHexString
 import org.komputing.khex.model.HexString
 import org.walletconnect.Session
-import org.walletconnect.Session.Config.Companion.fromWCUri
 import org.walletconnect.impls.FileWCSessionStore
 import org.walletconnect.impls.MoshiPayloadAdapter
 import org.walletconnect.impls.OkHttpTransport
@@ -44,8 +43,7 @@ import pm.gnosis.eip712.adapters.moshi.MoshiAdapter
 import pm.gnosis.eip712.typedDataHash
 import java.io.File
 
-class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
-
+class WalletConnect(private val wcListener : WalletConnectListener, private var bip32Path: String, private var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
     private val scope = MainScope()
     private val moshi = Moshi.Builder().build()
     private val okHttpClient = OkHttpClient()
@@ -54,27 +52,33 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
     private var requestId: Long = 0
     private var uiAction: (Intent?) -> Unit = this::nop
     private var signAction: (RecoverableSignature) -> Unit = this::nop
+    var currentAccount: String? = null
+        private set(value) {
+            field = value
+            wcListener.onAccountChanged(value)
+        }
 
     override fun onStatus(status: Session.Status) {
-        when (status) {
-            is Session.Status.Error -> println("WalletConnect Error")
-            is Session.Status.Approved -> println("WalletConnect Approved")
-            is Session.Status.Connected -> println("WalletConnect Connected")
-            is Session.Status.Disconnected -> println("WalletConnect Disconnected")
-            is Session.Status.Closed -> session = null
+        when(status) {
+            Session.Status.Approved, Session.Status.Connected -> wcListener.onConnected()
+            is Session.Status.Error, Session.Status.Disconnected, Session.Status.Closed -> { wcListener.onDisconnected(); session = null; currentAccount = null }
         }
     }
 
     override fun onMethodCall(call: Session.MethodCall) {
         scope.launch(Dispatchers.IO) {
             when (call) {
-                is Session.MethodCall.SessionRequest -> Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(ExportKeyCommand(Registry.walletConnect, bip32Path)))
+                is Session.MethodCall.SessionRequest -> getAccountKeys()
                 is Session.MethodCall.SignMessage -> signText(call.id, call.message)
                 is Session.MethodCall.SendTransaction -> signTransaction(call.id, toTransaction(call), true)
                 is Session.MethodCall.Custom -> onCustomCall(call)
                 else -> session?.rejectRequest(call.id(), 1L, "Not implemented")
             }
         }
+    }
+
+    private fun getAccountKeys() {
+        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(ExportKeyCommand(Registry.walletConnect, bip32Path)))
     }
 
     private inline fun <reified T> runOnValidParam(call: Session.MethodCall.Custom, index: Int, body: (T) -> Unit) {
@@ -94,7 +98,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
     private fun onCustomCall(call: Session.MethodCall.Custom) {
         when(call.method) {
             "personal_sign" -> runOnValidParam<String>(call, 0) { signText(call.id, it) }
-            "eth_signTypedData" -> { runOnValidParam<String>(call, 1) { @Suppress("UNCHECKED_CAST") signTypedData(call.id, it) } }
+            "eth_signTypedData" -> { runOnValidParam<String>(call, 1) { signTypedData(call.id, it) } }
             "eth_signTransaction" -> { runOnValidParam<Map<*, *>>(call, 0) { signTransaction(call.id, toTransaction(toSendTransaction(call.id, it)), false)} }
             "eth_sendRawTransaction" -> { runOnValidParam<String>(call, 0) { relayTX(call.id, it) } }
             else -> session?.rejectRequest(call.id, 1L, "Not implemented")
@@ -134,7 +138,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
             Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
-        signAction = { session?.approveRequest(requestId, "0x${it.r.toNoPrefixHexString()}${it.s.toNoPrefixHexString()}${encode((it.recId + 27).toByte())}") }
+        signAction = { session?.approveRequest(requestId, formatDataSignature(it)) }
 
         val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
             putExtra(SIGN_TEXT_MESSAGE, text)
@@ -151,7 +155,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
             Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
-        signAction = { session?.approveRequest(requestId, "0x${it.r.toNoPrefixHexString()}${it.s.toNoPrefixHexString()}${encode((it.recId + 27).toByte())}") }
+        signAction = { session?.approveRequest(requestId, formatDataSignature(it)) }
 
         val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
             putExtra(SIGN_TEXT_MESSAGE, message)
@@ -159,6 +163,8 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
 
         Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
     }
+
+    private fun formatDataSignature(sig: RecoverableSignature) : String = "0x${sig.r.toNoPrefixHexString()}${sig.s.toNoPrefixHexString()}${encode((sig.recId + 27).toByte())}"
 
     private fun signTransaction(id: Long, tx: Transaction, send: Boolean) {
         requestId = id
@@ -215,12 +221,12 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
         uiAction = this::nop
     }
 
-    fun connect(uri: String) {
+    fun connect(uri: Session.FullyQualifiedConfig) {
         scope.launch(Dispatchers.IO) {
             session?.kill()
 
             session = WCSession(
-                fromWCUri(uri).toFullyQualifiedConfig(),
+                uri,
                 MoshiPayloadAdapter(moshi),
                 sessionStore,
                 OkHttpTransport.Builder(okHttpClient, moshi),
@@ -232,10 +238,35 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
         }
     }
 
+    fun disconnect() {
+        session?.kill()
+    }
+
+    fun updateChainAndDerivation(newBip32Path: String, newChainID: Long) {
+        if (newBip32Path == bip32Path) {
+            if (newChainID != chainID) {
+                this.chainID = newChainID
+                if (session != null && currentAccount != null) {
+                    session?.update(listOf(currentAccount!!), this.chainID)
+                }
+            }
+        } else {
+            this.bip32Path = newBip32Path
+            this.chainID = newChainID
+            if (session != null && currentAccount != null) {
+                getAccountKeys()
+            }
+        }
+    }
+
     override fun onResponse(keyPair: BIP32KeyPair) {
         scope.launch(Dispatchers.IO) {
-            val addr = keyPair.toEthereumAddress().toHexString()
-            session?.approve(listOf(addr), chainID)
+            currentAccount = keyPair.toEthereumAddress().toHexString()
+            if (session?.approvedAccounts() != null) {
+                session?.update(listOf(currentAccount!!), chainID)
+            } else {
+                session?.approve(listOf(currentAccount!!), chainID)
+            }
         }
     }
 

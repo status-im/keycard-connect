@@ -48,6 +48,11 @@ class PUKActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+    }
+
     private fun validateFields() {
         val pukText = findViewById<EditText>(R.id.pukText).text.toString()
         val pinText = findViewById<EditText>(R.id.newPINText).text.toString()

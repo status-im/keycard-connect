@@ -31,4 +31,9 @@ class PairingActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED)
         finish()
     }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
+    }
 }

@@ -14,8 +14,11 @@ class SettingsManager(context: Context) {
         sharedPreferences = EncryptedSharedPreferences.create(context,"settings", masterKey, EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM)
     }
 
-    val rpcEndpoint
-        get() = String.format(RPC_ENDPOINT_TEMPLATE, CHAIN_ID_TO_SHORTNAME.getValue(sharedPreferences.getLong(SETTINGS_CHAIN_ID, DEFAULT_CHAIN_ID)))
+    val rpcEndpoint : String
+        get() {
+            val chainID = sharedPreferences.getLong(SETTINGS_CHAIN_ID, DEFAULT_CHAIN_ID)
+            return if (chainID == CHAIN_ID_XDAI) XDAI_ENDPOINT else String.format(RPC_ENDPOINT_TEMPLATE, CHAIN_ID_TO_SHORTNAME.getValue(chainID))
+        }
 
     var chainID
         get() = sharedPreferences.getLong(SETTINGS_CHAIN_ID, DEFAULT_CHAIN_ID)
