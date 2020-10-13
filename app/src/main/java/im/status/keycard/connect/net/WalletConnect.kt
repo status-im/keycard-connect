@@ -50,12 +50,14 @@ class WalletConnect(var sessionStatusListener : Session.Callback, var bip32Path:
     private val sessionStore = FileWCSessionStore(File(Registry.mainActivity.filesDir, "wcSessions.json").apply { createNewFile() }, moshi)
     private var session: WCSession? = null
     private var requestId: Long = 0
+    private var currentAccount: String? = null
     private var uiAction: (Intent?) -> Unit = this::nop
     private var signAction: (RecoverableSignature) -> Unit = this::nop
 
     override fun onStatus(status: Session.Status) {
         if (status == Session.Status.Closed) {
             session = null
+            currentAccount = null
         }
     }
 
@@ -235,8 +237,8 @@ class WalletConnect(var sessionStatusListener : Session.Callback, var bip32Path:
 
     override fun onResponse(keyPair: BIP32KeyPair) {
         scope.launch(Dispatchers.IO) {
-            val addr = keyPair.toEthereumAddress().toHexString()
-            session?.approve(listOf(addr), chainID)
+            currentAccount = keyPair.toEthereumAddress().toHexString()
+            session?.approve(listOf(currentAccount!!), chainID)
         }
     }
 
