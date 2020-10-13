@@ -7,7 +7,7 @@
     <string name="pin_label">PIN</string>
     <string name="puk_label">PUK</string>
     <string name="pairing_label">Pairing password</string>
-    <string name="change_pin_prompt">New PIN</string>
+    <string name="change_pin_prompt">Insert new PIN</string>
     <string name="change_pin">Change PIN</string>
     <string name="puk_prompt">Insert your PUK</string>
     <string name="nfc_prompt">Tap your card</string>
@@ -31,8 +31,8 @@
     <string name="unpair_others">Unpair Others</string>
     <string name="change_key">Change Key</string>
     <string name="remove_key">Remove key</string>
-    <string name="change_puk_prompt">New PUK</string>
-    <string name="change_pairing_password_prompt">New pairing password</string>
+    <string name="change_puk_prompt">Insert new PUK</string>
+    <string name="change_pairing_password_prompt">Insert new pairing password</string>
     <string name="network">Network</string>
     <string name="wallet_path_label">Wallet Path</string>
     <string name="wallet_path_hint">m/44\'/...</string>
@@ -44,4 +44,5 @@
     <string name="reinstall_cash_checkbox">Install Cash applet</string>
     <string name="reinstall_ndef_checkbox">Install NDEF applet</string>
     <string name="reinstall_button">Select cap file and install</string>
+    <string name="btn_change">Change</string>
 </resources>
