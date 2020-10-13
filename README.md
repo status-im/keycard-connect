@@ -3,7 +3,7 @@
 **NOTE**: _This app is a prototype. While it seems to work reasonably well and stable, the UI has not received any thought yet. 
 It is fine to use but keep in mind that there isn't much error reporting, no progress indicators and some screens are crammed with info_
 
-Keycard Connect's main function is to enable using the Keycard with dApps outside of a web3 browser using WalletConnect. The dApp must of course support WalletConnect for this to work. Additionally, this app is a little toolbox for Keycardm allowing things like changing PIN, initializing cards, changing seed etc.
+Keycard Connect's main function is to enable using the Keycard with dApps outside of a web3 browser using WalletConnect. The dApp must of course support WalletConnect for this to work. Additionally, this app is a little toolbox for Keycard, allowing things like changing PIN, initializing cards, changing seed etc.
 
 ## What works
 
