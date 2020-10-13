@@ -44,8 +44,7 @@ import pm.gnosis.eip712.adapters.moshi.MoshiAdapter
 import pm.gnosis.eip712.typedDataHash
 import java.io.File
 
-class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
-
+class WalletConnect(var sessionStatusListener : Session.Callback, var bip32Path: String, var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
     private val scope = MainScope()
     private val moshi = Moshi.Builder().build()
     private val okHttpClient = OkHttpClient()
@@ -56,12 +55,8 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
     private var signAction: (RecoverableSignature) -> Unit = this::nop
 
     override fun onStatus(status: Session.Status) {
-        when (status) {
-            is Session.Status.Error -> println("WalletConnect Error")
-            is Session.Status.Approved -> println("WalletConnect Approved")
-            is Session.Status.Connected -> println("WalletConnect Connected")
-            is Session.Status.Disconnected -> println("WalletConnect Disconnected")
-            is Session.Status.Closed -> session = null
+        if (status == Session.Status.Closed) {
+            session = null
         }
     }
 
@@ -94,7 +89,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
     private fun onCustomCall(call: Session.MethodCall.Custom) {
         when(call.method) {
             "personal_sign" -> runOnValidParam<String>(call, 0) { signText(call.id, it) }
-            "eth_signTypedData" -> { runOnValidParam<String>(call, 1) { @Suppress("UNCHECKED_CAST") signTypedData(call.id, it) } }
+            "eth_signTypedData" -> { runOnValidParam<String>(call, 1) { signTypedData(call.id, it) } }
             "eth_signTransaction" -> { runOnValidParam<Map<*, *>>(call, 0) { signTransaction(call.id, toTransaction(toSendTransaction(call.id, it)), false)} }
             "eth_sendRawTransaction" -> { runOnValidParam<String>(call, 0) { relayTX(call.id, it) } }
             else -> session?.rejectRequest(call.id, 1L, "Not implemented")
@@ -134,7 +129,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
             Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
-        signAction = { session?.approveRequest(requestId, "0x${it.r.toNoPrefixHexString()}${it.s.toNoPrefixHexString()}${encode((it.recId + 27).toByte())}") }
+        signAction = { session?.approveRequest(requestId, formatDataSignature(it)) }
 
         val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
             putExtra(SIGN_TEXT_MESSAGE, text)
@@ -151,7 +146,7 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
             Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(SignCommand(Registry.walletConnect, hash)))
         }
 
-        signAction = { session?.approveRequest(requestId, "0x${it.r.toNoPrefixHexString()}${it.s.toNoPrefixHexString()}${encode((it.recId + 27).toByte())}") }
+        signAction = { session?.approveRequest(requestId, formatDataSignature(it)) }
 
         val intent = Intent(Registry.mainActivity, SignMessageActivity::class.java).apply {
             putExtra(SIGN_TEXT_MESSAGE, message)
@@ -159,6 +154,8 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
 
         Registry.mainActivity.startActivityForResult(intent, REQ_WALLETCONNECT)
     }
+
+    private fun formatDataSignature(sig: RecoverableSignature) : String = "0x${sig.r.toNoPrefixHexString()}${sig.s.toNoPrefixHexString()}${encode((sig.recId + 27).toByte())}"
 
     private fun signTransaction(id: Long, tx: Transaction, send: Boolean) {
         requestId = id
@@ -227,9 +224,14 @@ class WalletConnect(var bip32Path: String, var chainID: Long) : ExportKeyCommand
                 Session.PeerMeta(name = "Keycard Connect")
             )
 
+            session?.addCallback(Registry.walletConnect.sessionStatusListener)
             session?.addCallback(Registry.walletConnect)
             session?.init()
         }
+    }
+
+    fun disconnect() {
+        session?.kill()
     }
 
     override fun onResponse(keyPair: BIP32KeyPair) {

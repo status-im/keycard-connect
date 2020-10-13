@@ -6,6 +6,7 @@ import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.ViewSwitcher
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.client.android.Intents
@@ -14,9 +15,10 @@ import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.*
+import org.walletconnect.Session
 import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity(), ScriptListener {
+class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
     private lateinit var viewSwitcher: ViewSwitcher
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         inflater.inflate(R.layout.activity_nfc, viewSwitcher)
 
         setContentView(viewSwitcher)
-        Registry.init(this, this)
+        Registry.init(this, this, this)
         Registry.scriptExecutor.defaultScript = cardCheckupScript()
     }
 
@@ -75,6 +77,10 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
         integrator.setOrientationLocked(false)
         integrator.initiateScan()
+    }
+
+    fun disconnectWallet(@Suppress("UNUSED_PARAMETER") view: View) {
+        Registry.walletConnect.disconnect()
     }
 
     fun changePIN(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -136,5 +142,25 @@ class MainActivity : AppCompatActivity(), ScriptListener {
         if (uri != null && uri.startsWith("wc:")) {
             Registry.walletConnect.connect(uri)
         }
+    }
+
+    override fun onMethodCall(call: Session.MethodCall) {}
+    override fun onStatus(status: Session.Status) {
+        when (status) {
+            is Session.Status.Error, Session.Status.Closed, Session.Status.Disconnected -> walletConnectDisconnected()
+            is Session.Status.Connected, Session.Status.Approved -> walletConnectConnected()
+        }
+    }
+
+    private fun walletConnectConnected() {
+        val button = findViewById<Button>(R.id.walletConnectButton)
+        button.setOnClickListener(this::disconnectWallet)
+        button.text = getString(R.string.disconnect_wallet)
+    }
+
+    private fun walletConnectDisconnected() {
+        val button = findViewById<Button>(R.id.walletConnectButton)
+        button.setOnClickListener(this::connectWallet)
+        button.text = getString(R.string.connect_wallet)
     }
 }
