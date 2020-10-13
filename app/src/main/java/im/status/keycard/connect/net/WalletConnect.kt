@@ -43,7 +43,7 @@ import pm.gnosis.eip712.adapters.moshi.MoshiAdapter
 import pm.gnosis.eip712.typedDataHash
 import java.io.File
 
-class WalletConnect(private val sessionStatusListener : Session.Callback, private var bip32Path: String, private var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
+class WalletConnect(private val wcListener : WalletConnectListener, private var bip32Path: String, private var chainID: Long) : ExportKeyCommand.Listener, SignCommand.Listener, Session.Callback {
     private val scope = MainScope()
     private val moshi = Moshi.Builder().build()
     private val okHttpClient = OkHttpClient()
@@ -53,12 +53,15 @@ class WalletConnect(private val sessionStatusListener : Session.Callback, privat
     private var uiAction: (Intent?) -> Unit = this::nop
     private var signAction: (RecoverableSignature) -> Unit = this::nop
     var currentAccount: String? = null
-        private set
+        private set(value) {
+            field = value
+            wcListener.onAccountChanged(value)
+        }
 
     override fun onStatus(status: Session.Status) {
-        if (status == Session.Status.Closed) {
-            session = null
-            currentAccount = null
+        when(status) {
+            Session.Status.Approved, Session.Status.Connected -> wcListener.onConnected()
+            is Session.Status.Error, Session.Status.Disconnected, Session.Status.Closed -> { wcListener.onDisconnected(); session = null; currentAccount = null }
         }
     }
 
@@ -230,7 +233,6 @@ class WalletConnect(private val sessionStatusListener : Session.Callback, privat
                 Session.PeerMeta(name = "Keycard Connect")
             )
 
-            session?.addCallback(Registry.walletConnect.sessionStatusListener)
             session?.addCallback(Registry.walletConnect)
             session?.init()
         }

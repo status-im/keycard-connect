@@ -13,6 +13,7 @@ import im.status.keycard.connect.data.PairingManager
 import im.status.keycard.connect.data.SettingsManager
 import im.status.keycard.connect.net.EthereumRPC
 import im.status.keycard.connect.net.WalletConnect
+import im.status.keycard.connect.net.WalletConnectListener
 import org.walletconnect.Session
 
 @SuppressLint("StaticFieldLeak")
@@ -53,7 +54,7 @@ object Registry {
         value.add(0, KotlinJsonAdapterFactory())
     }
 
-    fun init(activity: Activity, listener: ScriptListener, sessionListener: Session.Callback) {
+    fun init(activity: Activity, listener: ScriptListener, wcListener: WalletConnectListener) {
         //TODO: remove this hack, it is needed  now because KEthereum does not add the KotlinJsonAdapterFactory
         moshiAddKotlin()
 
@@ -71,6 +72,6 @@ object Registry {
         cardManager.start()
 
         ethereumRPC = EthereumRPC(settingsManager.rpcEndpoint)
-        walletConnect = WalletConnect(sessionListener, settingsManager.bip32Path, settingsManager.chainID)
+        walletConnect = WalletConnect(wcListener, settingsManager.bip32Path, settingsManager.chainID)
     }
 }

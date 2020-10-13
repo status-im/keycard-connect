@@ -14,11 +14,12 @@ import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.*
 import im.status.keycard.connect.data.*
+import im.status.keycard.connect.net.WalletConnectListener
 import org.walletconnect.Session
 import org.walletconnect.Session.Config.Companion.fromWCUri
 import kotlin.reflect.KClass
 
-class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
+class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener {
     private lateinit var viewSwitcher: ViewSwitcher
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -186,25 +187,19 @@ class MainActivity : AppCompatActivity(), ScriptListener, Session.Callback {
         }
     }
 
-    override fun onMethodCall(call: Session.MethodCall) {}
-    override fun onStatus(status: Session.Status) {
-        when (status) {
-            is Session.Status.Error, Session.Status.Closed, Session.Status.Disconnected -> walletConnectDisconnected()
-            is Session.Status.Connected, Session.Status.Approved -> walletConnectConnected()
-        }
-    }
-
-    private fun walletConnectConnected() {
+    override fun onConnected() {
         val button = findViewById<Button>(R.id.walletConnectButton)
         button.setOnClickListener(this::disconnectWallet)
         button.text = getString(R.string.disconnect_wallet)
-        findViewById<TextView>(R.id.walletAddress).text = Registry.walletConnect.currentAccount
     }
 
-    private fun walletConnectDisconnected() {
+    override fun onDisconnected() {
         val button = findViewById<Button>(R.id.walletConnectButton)
         button.setOnClickListener(this::connectWallet)
         button.text = getString(R.string.connect_wallet)
-        findViewById<TextView>(R.id.walletAddress).text = ""
+    }
+
+    override fun onAccountChanged(account: String?) {
+        findViewById<TextView>(R.id.walletAddress).text = account
     }
 }
