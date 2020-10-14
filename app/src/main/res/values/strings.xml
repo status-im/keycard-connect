@@ -10,7 +10,7 @@
     <string name="change_pin_prompt">Insert new PIN</string>
     <string name="change_pin">Change PIN</string>
     <string name="puk_prompt">Insert your PUK</string>
-    <string name="nfc_prompt">Tap your card</string>
+    <string name="nfc_prompt">Tap your card to the back of your phone</string>
     <string name="connect_wallet">Connect to WalletConnect</string>
     <string name="sign_button">Sign</string>
     <string name="reject_button">Reject</string>

@@ -54,7 +54,7 @@
         android:onClick="cancel"
         android:text="@android:string/cancel"
         android:textAllCaps="false"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/okButton" />
@@ -84,7 +84,7 @@
         android:layout_marginTop="44dp"
         android:fontFamily="@font/quattrocento_sans"
         android:text="@string/pin_attempts"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorAccentDark"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
