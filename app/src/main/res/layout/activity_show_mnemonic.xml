@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimaryDark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ShowMnemonicActivity">
@@ -10,23 +11,32 @@
         android:id="@+id/mnemonicLabel"
         android:layout_width="358dp"
         android:layout_height="58dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/mnemonic_label"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorAccentDark"
+        app:layout_constraintBottom_toTopOf="@+id/mnemonicView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/mnemonicImageView" />
 
     <Button
         android:id="@+id/okButton"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="ok"
         android:text="@string/mnemonic_ok_button"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mnemonicView" />
 
@@ -34,10 +44,30 @@
         android:id="@+id/mnemonicView"
         android:layout_width="359dp"
         android:layout_height="272dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/quattrocento_sans"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/colorAccent"
+        android:textSize="32sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mnemonicLabel"
         tools:text="initial require hint finger typical weapon giant produce select viable hybrid ostrich" />
+
+    <ImageView
+        android:id="@+id/mnemonicImageView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginBottom="35dp"
+        android:contentDescription="@string/keycard_image"
+        app:layout_constraintBottom_toTopOf="@+id/mnemonicLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_keycard" />
 </androidx.constraintlayout.widget.ConstraintLayout>

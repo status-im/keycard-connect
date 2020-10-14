@@ -202,6 +202,10 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
     }
 
     override fun onAccountChanged(account: String?) {
-        findViewById<TextView>(R.id.walletAddress).text = account
+        if (account == null) {
+            findViewById<TextView>(R.id.walletAddress).text = getString(R.string.wallet_not_connected)
+        } else {
+            findViewById<TextView>(R.id.walletAddress).text = account
+        }
     }
 }

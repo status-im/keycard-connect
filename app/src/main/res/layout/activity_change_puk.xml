@@ -102,6 +102,7 @@
         android:layout_marginTop="65dp"
         android:layout_marginEnd="190dp"
         android:layout_marginBottom="20dp"
+        android:contentDescription="@string/puk_image"
         app:layout_constraintBottom_toTopOf="@+id/newPukPrompt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,6 +115,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="5dp"
+        android:contentDescription="@string/pass_image"
         app:layout_constraintBottom_toBottomOf="@+id/newPUKText"
         app:layout_constraintStart_toStartOf="@+id/newPUKText"
         app:layout_constraintTop_toTopOf="@+id/newPUKText"
@@ -125,8 +127,10 @@
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="5dp"
+        android:contentDescription="@string/pass_image"
         app:layout_constraintBottom_toBottomOf="@+id/pukConfirmation"
         app:layout_constraintStart_toStartOf="@+id/pukConfirmation"
         app:layout_constraintTop_toTopOf="@+id/pukConfirmation"
-        app:srcCompat="@drawable/ic_password" />
+        app:srcCompat="@drawable/ic_password"
+        tools:srcCompat="@drawable/ic_password" />
 </androidx.constraintlayout.widget.ConstraintLayout>
