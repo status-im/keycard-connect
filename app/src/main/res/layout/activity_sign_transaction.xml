@@ -4,92 +4,177 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ui.SignTransactionActivity">
+
+    <ImageView
+        android:id="@+id/transactionImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="369dp"
+        android:contentDescription="@string/keycard_image"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="-6"
+        app:srcCompat="@drawable/ic_transaction_bg" />
 
     <TextView
         android:id="@+id/signTxLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/sign_tx_label"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/ethImageView" />
 
     <TextView
         android:id="@+id/signTxAmount"
-        android:layout_width="358dp"
+        android:layout_width="wrap_content"
         android:layout_height="47dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="148dp"
+        android:layout_marginEnd="1dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorPrimary"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/signTxCurrency"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signTxLabel"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="3.0" />
 
     <TextView
         android:id="@+id/signTxCurrency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="148dp"
+        android:layout_marginEnd="120dp"
+        android:fontFamily="@font/quattrocento_sans"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="34sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signTxAmount"
+        app:layout_constraintStart_toEndOf="@id/signTxAmount"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="ETH" />
 
     <TextView
         android:id="@+id/signTxToLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="416dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/sign_tx_to_label"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorAccentDark"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signTxCurrency" />
+        app:layout_constraintTop_toTopOf="@+id/transactionImageView" />
 
     <TextView
         android:id="@+id/signTxTo"
-        android:layout_width="369dp"
+        android:layout_width="330dp"
         android:layout_height="54dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="410dp"
+        android:layout_marginEnd="5dp"
+        android:fontFamily="@font/quattrocento_sans"
+        android:gravity="center_vertical"
+        android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signTxToLabel"
+        app:layout_constraintStart_toEndOf="@+id/signTxToLabel"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="0xc77afd17ed5a48267b37171d579b6897bfcc20a3d47d55319e76e3aa9424b7d4" />
 
     <TextView
         android:id="@+id/signTxData"
-        android:layout_width="391dp"
-        android:layout_height="283dp"
-        android:layout_marginTop="68dp"
+        android:layout_width="360dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/textarea_mnemonic"
+        android:fontFamily="@font/quattrocento_sans"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signTxTo"
         tools:text="0x...." />
 
     <Button
-        android:id="@+id/signButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="48dp"
-        android:onClick="sign"
-        android:text="@string/sign_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signTxData" />
-
-    <Button
         android:id="@+id/rejectButton"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="28dp"
+        android:background="@drawable/button_transaction_light"
+        android:fontFamily="@font/quattrocento_sans"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="220dp"
         android:onClick="reject"
         android:text="@string/reject_button"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/signButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signTxData" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/signButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_transaction_dark"
+        android:fontFamily="@font/quattrocento_sans"
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="70dp"
+        android:onClick="sign"
+        android:text="@string/sign_button"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/lineImageView"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/keycard_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signTxTo"
+        app:srcCompat="@drawable/button_transaction_dark" />
+
+    <ImageView
+        android:id="@+id/ethImageView"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/keycard_image"
+        app:layout_constraintBottom_toTopOf="@+id/signTxLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ethereum" />
 </androidx.constraintlayout.widget.ConstraintLayout>

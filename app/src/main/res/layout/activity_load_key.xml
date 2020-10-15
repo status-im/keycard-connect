@@ -4,47 +4,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ui.LoadKeyActivity">
 
     <TextView
         android:id="@+id/generateMnemonicLabel"
         android:layout_width="323dp"
         android:layout_height="45dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/load_generate_mnemonic_label"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/mnemonicImageView" />
 
     <Button
         android:id="@+id/generateBIP39Button"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="generateBIP39"
         android:text="@string/load_generate_mnemonic"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/generateMnemonicLabel" />
 
     <TextView
+        android:id="@+id/orLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/quattrocento_sans"
+        android:text="@string/or"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent"
+        android:textColorHighlight="@color/colorAccent"
+        android:textColorLink="@color/colorAccent"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/generateBIP39Button" />
+
+    <TextView
         android:id="@+id/importMnemonicLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/load_import_mnemonic_label"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/generateBIP39Button" />
+        app:layout_constraintTop_toBottomOf="@id/orLabel" />
 
     <Button
         android:id="@+id/importMnemonic"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="importBIP39"
         android:text="@string/load_import_mnemonic"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,47 +89,56 @@
     <EditText
         android:id="@+id/importMnemonicText"
         android:layout_width="370dp"
-        android:layout_height="130dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/textarea_mnemonic"
         android:ems="10"
+        android:fontFamily="@font/quattrocento_sans"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/colorAccent"
+        android:textColorHighlight="@color/colorAccent"
+        android:textSize="26sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/importMnemonicLabel" />
-
-    <TextView
-        android:id="@+id/generateOnCardLabel"
-        android:layout_width="347dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/load_generate_on_card_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/importMnemonic" />
-
-    <Button
-        android:id="@+id/generateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:onClick="generateOnCard"
-        android:text="@string/load_key_generate_oncard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/generateOnCardLabel" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="50dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="cancel"
         android:text="@android:string/cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/generateButton" />
+        app:layout_constraintTop_toBottomOf="@+id/importMnemonic" />
+
+    <ImageView
+        android:id="@+id/mnemonicImageView"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginBottom="35dp"
+        android:contentDescription="@string/keycard_image"
+        app:layout_constraintBottom_toTopOf="@+id/generateMnemonicLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_mnemonic_generate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,48 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ui.ReinstallActivity">
 
     <TextView
         android:id="@+id/reinstallPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="35dp"
+        android:fontFamily="@font/roboto_bold"
         android:text="@string/reinstall_applet_prompt"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/reinstallImageView" />
 
     <TextView
         android:id="@+id/reinstallWarning"
         android:layout_width="327dp"
         android:layout_height="127dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/reinstall_warning"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reinstallPrompt" />
 
     <CheckBox
         android:id="@+id/reinstallWalletCheckbox"
-        android:layout_width="324dp"
+        android:layout_width="200dp"
         android:layout_height="25dp"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:buttonTint="@color/colorPrimary"
         android:checked="true"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/reinstall_wallet_checkbox"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reinstallWarning" />
 
     <CheckBox
         android:id="@+id/reinstallCashCheckbox"
-        android:layout_width="324dp"
+        android:layout_width="200dp"
         android:layout_height="25dp"
         android:layout_marginTop="16dp"
+        android:buttonTint="@color/colorPrimary"
         android:checked="true"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/reinstall_cash_checkbox"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,11 +68,14 @@
 
     <CheckBox
         android:id="@+id/reinstallNDEFCheckbox"
-        android:layout_width="324dp"
+        android:layout_width="200dp"
         android:layout_height="25dp"
         android:layout_marginTop="16dp"
+        android:buttonTint="@color/colorPrimary"
         android:checked="true"
+        android:fontFamily="@font/quattrocento_sans"
         android:text="@string/reinstall_ndef_checkbox"
+        android:textColor="@color/colorAccentDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,24 +83,50 @@
 
     <Button
         android:id="@+id/cancelButton"
-        android:layout_width="324dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="50dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="cancel"
         android:text="@android:string/cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccentDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reinstallButton" />
+
+    <Button
+        android:id="@+id/reinstallButton"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/quattrocento_sans"
+        android:onClick="reinstall"
+        android:text="@string/reinstall_button"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reinstallNDEFCheckbox" />
 
-    <Button
-        android:id="@+id/reinstallButton"
-        android:layout_width="324dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="16dp"
-        android:onClick="reinstall"
-        android:text="@string/reinstall_button"
+    <ImageView
+        android:id="@+id/reinstallImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/reinstallPrompt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cancelButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_reinstall" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

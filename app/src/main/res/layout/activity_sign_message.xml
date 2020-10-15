@@ -4,48 +4,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ui.SignMessageActivity">
 
     <TextView
         android:id="@+id/signTextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/roboto_bold"
         android:text="@string/sign_text_label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/ethImageView" />
 
     <Button
         android:id="@+id/signButton"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="68dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="sign"
         android:text="@string/sign_button"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signText" />
 
     <Button
         android:id="@+id/rejectButton"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/quattrocento_sans"
         android:onClick="reject"
         android:text="@string/reject_button"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccentDark"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signText" />
 
     <TextView
         android:id="@+id/signText"
-        android:layout_width="306dp"
-        android:layout_height="389dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="fill_parent"
+        android:layout_height="350dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/textarea"
+        android:fontFamily="@font/quattrocento_sans"
+        android:textColor="@color/colorAccent"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signTextLabel" />
+
+    <ImageView
+        android:id="@+id/ethImageView"
+        android:layout_width="150dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginBottom="20dp"
+        android:contentDescription="@string/keycard_image"
+        android:rotation="-50"
+        app:layout_constraintBottom_toTopOf="@+id/signTextLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/keycard_card" />
 </androidx.constraintlayout.widget.ConstraintLayout>
