@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         networkSpinner = findViewById(R.id.networkSpinner)
         walletPath = findViewById(R.id.walletPathText)
 
-        ArrayAdapter.createFromResource(this, R.array.networks, android.R.layout.simple_spinner_item).also {
+        ArrayAdapter.createFromResource(this, R.array.networks, R.layout.spinner_item_layout).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             networkSpinner.adapter = it
         }
@@ -116,7 +116,8 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         Registry.scriptExecutor.cancelScript()
     }
 
-    fun connectWallet(@Suppress("UNUSED_PARAMETER") view: View) {
+    fun connectWallet(view: View) {
+        updateConnection(view)
         val integrator = IntentIntegrator(this)
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
         integrator.setOrientationLocked(false)
