@@ -7,6 +7,7 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 import im.status.keycard.connect.data.REQ_INTERACTIVE_SCRIPT
 import im.status.keycard.connect.ui.PairingActivity
+import java.lang.Exception
 
 class OpenSecureChannelCommand : CardCommand {
     private var pairingPassword: String? = null
@@ -19,10 +20,13 @@ class OpenSecureChannelCommand : CardCommand {
 
     private fun pair(activity: Activity, cmdSet: KeycardCommandSet): CardCommand.Result {
         if (pairingPassword != null) {
-            val res = runOnCard {
+            val res = try {
                 cmdSet.autoPair(pairingPassword)
                 Registry.pairingManager.putPairing(cmdSet.applicationInfo.instanceUID, cmdSet.pairing)
                 cmdSet.autoOpenSecureChannel()
+                CardCommand.Result.OK
+            } catch(e: Exception) {
+                CardCommand.Result.RETRY
             }
 
             pairingPassword = null

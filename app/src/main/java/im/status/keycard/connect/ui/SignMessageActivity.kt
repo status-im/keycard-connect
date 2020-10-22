@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.SIGN_TEXT_MESSAGE
 

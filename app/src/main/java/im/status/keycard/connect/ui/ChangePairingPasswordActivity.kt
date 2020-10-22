@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.ChangePairingPasswordCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
-import im.status.keycard.connect.data.isValidPUK
 
 class ChangePairingPasswordActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

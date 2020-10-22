@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
-import androidx.appcompat.app.AppCompatActivity
 import im.status.keycard.connect.R
 import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.ReinstallCommand
