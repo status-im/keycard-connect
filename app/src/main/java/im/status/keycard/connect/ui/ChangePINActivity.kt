@@ -1,5 +1,6 @@
 package im.status.keycard.connect.ui
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -16,6 +17,7 @@ class ChangePINActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_pin)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
         val pinText = findViewById<EditText>(R.id.newPINText)
         val pinConfirmation = findViewById<EditText>(R.id.pinConfirmation)

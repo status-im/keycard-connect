@@ -2,6 +2,7 @@ package im.status.keycard.connect.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -16,6 +17,7 @@ class PairingActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pairing)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         val passText = findViewById<EditText>(R.id.passwordText)
         passText.doAfterTextChanged { findViewById<Button>(R.id.okButton).isEnabled = passText.text.toString().isNotEmpty() }
     }

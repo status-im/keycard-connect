@@ -1,6 +1,7 @@
 package im.status.keycard.connect.ui
 
 import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -16,6 +17,7 @@ class SignTransactionActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_transaction)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
         findViewById<TextView>(R.id.signTxAmount).text = intent.getStringExtra(SIGN_TX_AMOUNT)
         findViewById<TextView>(R.id.signTxCurrency).text = intent.getStringExtra(SIGN_TX_CURRENCY)

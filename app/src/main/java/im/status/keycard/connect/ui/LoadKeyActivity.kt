@@ -2,6 +2,7 @@ package im.status.keycard.connect.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -15,6 +16,7 @@ class LoadKeyActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_load_key)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
 
     fun generateBIP39(@Suppress("UNUSED_PARAMETER") view: View) {

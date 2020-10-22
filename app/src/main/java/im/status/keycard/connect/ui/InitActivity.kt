@@ -2,6 +2,7 @@ package im.status.keycard.connect.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Base64
 import android.util.Base64.NO_PADDING
@@ -23,6 +24,7 @@ class InitActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_init)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
         pin = String.format("%06d", Crypto.randomLong(Crypto.PIN_BOUND))
         puk = String.format("%012d", Crypto.randomLong(Crypto.PUK_BOUND))

@@ -1,6 +1,7 @@
 package im.status.keycard.connect.ui
 
 import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -20,6 +21,7 @@ class PINActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         val attempts = intent.getIntExtra(PIN_ACTIVITY_ATTEMPTS, -1)
         cardUID = intent.getByteArrayExtra(PIN_ACTIVITY_CARD_UID)!!
 

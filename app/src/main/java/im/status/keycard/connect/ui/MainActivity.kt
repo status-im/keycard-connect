@@ -2,6 +2,7 @@ package im.status.keycard.connect.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewSwitcher = ViewSwitcher(this)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
         val inflater = LayoutInflater.from(this)
         inflater.inflate(R.layout.activity_main, viewSwitcher)
