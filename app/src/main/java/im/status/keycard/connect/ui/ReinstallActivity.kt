@@ -10,7 +10,7 @@ import im.status.keycard.connect.Registry
 import im.status.keycard.connect.card.ReinstallCommand
 import im.status.keycard.connect.data.REQ_APPLET_FILE
 
-class ReinstallActivity : AppCompatActivity() {
+class ReinstallActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reinstall)

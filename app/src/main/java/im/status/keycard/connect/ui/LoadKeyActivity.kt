@@ -10,7 +10,7 @@ import im.status.keycard.connect.R
 import im.status.keycard.connect.data.*
 import java.util.*
 
-class LoadKeyActivity : AppCompatActivity() {
+class LoadKeyActivity : NoNFCActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

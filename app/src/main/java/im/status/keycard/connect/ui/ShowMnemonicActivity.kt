@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.MNEMONIC_PHRASE
 
-class ShowMnemonicActivity : AppCompatActivity() {
+class ShowMnemonicActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_mnemonic)

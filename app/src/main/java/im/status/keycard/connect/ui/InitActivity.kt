@@ -15,7 +15,7 @@ import im.status.keycard.connect.data.INIT_ACTIVITY_PIN
 import im.status.keycard.connect.data.INIT_ACTIVITY_PUK
 import im.status.keycard.globalplatform.Crypto
 
-class InitActivity : AppCompatActivity() {
+class InitActivity : NoNFCActivity() {
     private lateinit var pin: String
     private lateinit var puk: String
     private lateinit var pairing: String

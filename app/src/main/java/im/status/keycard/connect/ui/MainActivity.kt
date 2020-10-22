@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.nfc.NfcAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
@@ -17,6 +18,8 @@ import im.status.keycard.connect.data.*
 import im.status.keycard.connect.net.WalletConnectListener
 import org.walletconnect.Session.Config.Companion.fromWCUri
 import kotlin.reflect.KClass
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener {
     private lateinit var viewSwitcher: ViewSwitcher
@@ -48,9 +51,18 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         handleIntent(intent)
     }
 
+    private fun activateNFC() {
+        Registry.nfcAdapter.enableReaderMode(
+            this,
+            Registry.cardManager,
+            NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+            null
+        )
+    }
+
     override fun onResume() {
         super.onResume()
-        Registry.nfcAdapter.enableReaderMode(this, Registry.cardManager,NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK, null)
+        activateNFC()
     }
 
     override fun onPause() {
@@ -81,7 +93,10 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            REQ_INTERACTIVE_SCRIPT -> Registry.scriptExecutor.onUserInteractionReturned(resultCode, data)
+            REQ_INTERACTIVE_SCRIPT -> Registry.scriptExecutor.onUserInteractionReturned(
+                resultCode,
+                data
+            )
             REQ_WALLETCONNECT -> Registry.walletConnect.onUserInteractionReturned(resultCode, data)
             REQ_LOADKEY -> loadKeyHandler(resultCode, data)
             IntentIntegrator.REQUEST_CODE -> qrCodeScanned(resultCode, data)
@@ -90,6 +105,7 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
 
     override fun onScriptStarted() {
         this.runOnUiThread {
+            activateNFC()
             viewSwitcher.showNext()
         }
     }
@@ -119,6 +135,7 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
     fun connectWallet(view: View) {
         updateConnection(view)
         val integrator = IntentIntegrator(this)
+        integrator.captureActivity = QRCodeActivity::class.java
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
         integrator.setOrientationLocked(false)
         integrator.initiateScan()
@@ -167,7 +184,14 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
         val loadType = data.getIntExtra(LOAD_TYPE, LOAD_NONE)
         val mnemonic = data.getStringExtra(LOAD_MNEMONIC)
 
-        Registry.scriptExecutor.runScript(scriptWithAuthentication().plus(LoadKeyCommand(loadType, mnemonic)))
+        Registry.scriptExecutor.runScript(
+            scriptWithAuthentication().plus(
+                LoadKeyCommand(
+                    loadType,
+                    mnemonic
+                )
+            )
+        )
     }
 
     private fun startCommand(activity: KClass<out Activity>) {
@@ -176,37 +200,49 @@ class MainActivity : AppCompatActivity(), ScriptListener, WalletConnectListener 
     }
 
     private fun qrCodeScanned(resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK || data == null) return
-
-        handleWCURI(data.getStringExtra(Intents.Scan.RESULT))
-
+        if (resultCode != Activity.RESULT_OK || data == null) {
+            Log.e(TAG, "QRCode result: $resultCode")
+        } else {
+            handleWCURI(data.getStringExtra(Intents.Scan.RESULT))
+        }
     }
 
     private fun handleWCURI(uri: String?) {
         if (uri != null) {
+            Log.d(TAG, "Connecting to $uri")
             try {
                 Registry.walletConnect.connect(fromWCUri(uri).toFullyQualifiedConfig())
-            } catch (e: Exception) {}
+            } catch (e: Exception) {
+                Log.e(TAG, "Parsing $uri failed", e)
+            }
+        } else {
+            Log.e(TAG, "Null URI received")
         }
     }
 
     override fun onConnected() {
-        val button = findViewById<Button>(R.id.walletConnectButton)
-        button.setOnClickListener(this::disconnectWallet)
-        button.text = getString(R.string.disconnect_wallet)
+        this.runOnUiThread {
+            val button = findViewById<Button>(R.id.walletConnectButton)
+            button.setOnClickListener(this::disconnectWallet)
+            button.text = getString(R.string.disconnect_wallet)
+        }
     }
 
     override fun onDisconnected() {
-        val button = findViewById<Button>(R.id.walletConnectButton)
-        button.setOnClickListener(this::connectWallet)
-        button.text = getString(R.string.connect_wallet)
+        this.runOnUiThread {
+            val button = findViewById<Button>(R.id.walletConnectButton)
+            button.setOnClickListener(this::connectWallet)
+            button.text = getString(R.string.connect_wallet)
+        }
     }
 
     override fun onAccountChanged(account: String?) {
-        if (account == null) {
-            findViewById<TextView>(R.id.walletAddress).text = getString(R.string.wallet_not_connected)
-        } else {
-            findViewById<TextView>(R.id.walletAddress).text = account
+        this.runOnUiThread {
+            if (account == null) {
+                findViewById<TextView>(R.id.walletAddress).text = getString(R.string.wallet_not_connected)
+            } else {
+                findViewById<TextView>(R.id.walletAddress).text = account
+            }
         }
     }
 }

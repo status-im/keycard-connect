@@ -12,7 +12,7 @@ import im.status.keycard.connect.card.ChangePairingPasswordCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
 import im.status.keycard.connect.data.isValidPUK
 
-class ChangePairingPasswordActivity : AppCompatActivity() {
+class ChangePairingPasswordActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_pairing_password)

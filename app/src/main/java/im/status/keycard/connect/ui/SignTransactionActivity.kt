@@ -11,7 +11,7 @@ import im.status.keycard.connect.data.SIGN_TX_CURRENCY
 import im.status.keycard.connect.data.SIGN_TX_DATA
 import im.status.keycard.connect.data.SIGN_TX_TO
 
-class SignTransactionActivity : AppCompatActivity() {
+class SignTransactionActivity : NoNFCActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

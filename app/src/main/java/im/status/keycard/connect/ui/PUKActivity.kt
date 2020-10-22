@@ -14,7 +14,7 @@ import im.status.keycard.connect.data.PUK_ACTIVITY_ATTEMPTS
 import im.status.keycard.connect.data.isValidPIN
 import im.status.keycard.connect.data.isValidPUK
 
-class PUKActivity : AppCompatActivity() {
+class PUKActivity : NoNFCActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

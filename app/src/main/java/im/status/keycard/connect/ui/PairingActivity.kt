@@ -11,7 +11,7 @@ import androidx.core.widget.doAfterTextChanged
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.PAIRING_ACTIVITY_PASSWORD
 
-class PairingActivity : AppCompatActivity() {
+class PairingActivity : NoNFCActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

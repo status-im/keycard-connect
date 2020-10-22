@@ -12,7 +12,7 @@ import im.status.keycard.connect.card.ChangePINCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
 import im.status.keycard.connect.data.isValidPIN
 
-class ChangePINActivity : AppCompatActivity() {
+class ChangePINActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_pin)

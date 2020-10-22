@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import im.status.keycard.connect.R
 import im.status.keycard.connect.data.SIGN_TEXT_MESSAGE
 
-class SignMessageActivity : AppCompatActivity() {
+class SignMessageActivity : NoNFCActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

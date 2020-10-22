@@ -14,7 +14,7 @@ import im.status.keycard.connect.data.PIN_ACTIVITY_ATTEMPTS
 import im.status.keycard.connect.data.PIN_ACTIVITY_CARD_UID
 import im.status.keycard.connect.data.isValidPIN
 
-class PINActivity : AppCompatActivity() {
+class PINActivity : NoNFCActivity() {
     private lateinit var cardUID: ByteArray
 
     override fun onCreate(savedInstanceState: Bundle?) {

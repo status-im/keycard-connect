@@ -12,7 +12,7 @@ import im.status.keycard.connect.card.ChangePUKCommand
 import im.status.keycard.connect.card.scriptWithAuthentication
 import im.status.keycard.connect.data.isValidPUK
 
-class ChangePUKActivity : AppCompatActivity() {
+class ChangePUKActivity : NoNFCActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_puk)
