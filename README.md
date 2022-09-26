@@ -31,7 +31,7 @@ At the moment all dApps tested worked fine. The implemented functions are:
 
 ### Keycard management
 * initialize an out-of-factory card with random PIN/PUK/pairing
-* pairing (to an already intialized car)
+* pairing (to an already intialized card)
 * Unblock PIN with PUK
 * Change PIN
 * change PUK
